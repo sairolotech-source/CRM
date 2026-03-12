@@ -91,6 +91,31 @@ Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used b
 
 Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
 
+### `artifacts/mobile` (`@workspace/mobile`)
+
+Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll forming machine manufacturer.
+
+**Tech Stack**: Expo SDK 54, Expo Router v6, NativeTabs (iOS 26+ liquid glass), React Native
+
+**Color Theme**: Industrial Blue (`#1A56DB`) + Navy background (`#0F172A`) + Electric Blue accent (`#0EA5E9`), Inter font
+
+**Screens**:
+- `(tabs)/index.tsx` — Home dashboard with quick actions, stats, feature list, WhatsApp CTA
+- `(tabs)/catalog.tsx` — Machine catalog with search, category filter, 8 machines
+- `(tabs)/services.tsx` — Service overview + AMC plan cards + emergency contact
+- `(tabs)/tools.tsx` — 4 business calculators (ROI, EMI, GST, RF)
+- `(tabs)/profile.tsx` — Company profile, contact info, quick links
+- `catalog/[id].tsx` — Machine detail with specs, features, quote & service CTAs
+- `service-request.tsx` — Service request form (modal) with priority selection
+- `quotation.tsx` — Get quotation form (modal)
+- `amc.tsx` — AMC plan enrollment (modal) with 3-tier plan selection
+- `support-ticket.tsx` — Support ticket form (modal) with categories
+
+**Key Notes**:
+- Uses `isLiquidGlassAvailable()` for iOS 26+ NativeTabs, falls back to classic Tabs with BlurView
+- All data is local/static (no backend integration)
+- All forms show local success states after submission
+
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
