@@ -1,229 +1,292 @@
+# SAI ROLOTECH — Master Project Reference
+
+This is the **master command file**. It tracks every change, every screen, every design rule, and every data file. This file is auto-loaded every session — nothing will be forgotten.
+
+---
+
 # Overview
 
-This project is a pnpm workspace monorepo using TypeScript, designed to manage an industrial roll forming machine manufacturing ecosystem. It encompasses an API server, a mobile application for machine users, suppliers, and job seekers, and an admin panel for managing machine visualizations. The core vision is to provide a comprehensive digital platform for **Sai Rolotech**, enhancing B2B interactions, streamlining operations, and offering advanced visualization tools for industrial machinery.
-
-The monorepo structure facilitates shared libraries and consistent tooling across different applications. Key capabilities include:
-- A robust API for machine data, visualizations, and admin settings.
-- A feature-rich mobile application with role-based dashboards, community features, and a detailed machine catalog.
-- An administrative interface for managing machine details and their associated 2D/3D visualization assets.
-
-The project aims to improve efficiency, customer engagement, and market reach for industrial machine manufacturers by leveraging modern web and mobile technologies.
+A pnpm workspace monorepo for **Sai Rolotech** — a B2B industrial roll forming machine manufacturer from **Rajkot, Gujarat**. The platform includes a mobile app, API server, and admin panel for managing machines, leads, service, community, and AI-powered sales tools.
 
 # User Preferences
 
-I prefer iterative development, with a focus on delivering functional components that can be reviewed and refined.
-When making changes, please explain the reasoning and potential impact.
-I like to see clear, concise code with good type definitions.
-Ask before making major architectural changes or introducing new external dependencies.
-I prefer detailed explanations for complex solutions.
-I prefer to communicate in a direct and technical manner.
+- Iterative development, functional components over mocked placeholders
+- Clear, concise code with strong TypeScript types
+- Ask before major architecture changes or new dependencies
+- Communicate directly, technically, in Hindi or English as needed
+- Explain reasoning and impact of changes
 
-# System Architecture
+---
 
-The project is structured as a pnpm workspace monorepo, ensuring consistent dependency management and shared codebases.
+# DESIGN SYSTEM (Critical — Follow Everywhere)
 
-**Core Technologies:**
-- **Monorepo Tool:** pnpm workspaces
-- **Node.js:** v24
-- **TypeScript:** v5.9
-- **API Framework:** Express 5
-- **Database:** PostgreSQL with Drizzle ORM
-- **Validation:** Zod (`zod/v4`) with `drizzle-zod`
-- **API Codegen:** Orval (from OpenAPI spec)
-- **Bundling:** esbuild (CJS bundle)
+## Colors
+| Token | Value | Usage |
+|-------|-------|-------|
+| Primary Blue | `#1A56DB` | Buttons, links, active states |
+| Navy Background | `#0F172A` | Dark headers, gradients |
+| Electric Blue | `#0EA5E9` | Accents, highlights |
+| Success Green | `#10B981` | Success states, service |
+| Warning Amber | `#F59E0B` | Quotation, warnings |
+| Error Red | `#EF4444` | Errors, urgent badges |
+| Purple | `#8B5CF6` | AMC, premium features |
 
-**Monorepo Structure:**
-- `artifacts/`: Deployable applications (e.g., `api-server`, `mobile`, `admin`)
-- `lib/`: Shared libraries (e.g., `api-spec`, `api-client-react`, `api-zod`, `db`)
-- `scripts/`: Utility scripts for development and operations.
+## Tab Gradients (Bottom Navigation)
+| Tab | Gradient |
+|-----|----------|
+| Home | `["#1E40AF", "#3B82F6"]` |
+| Catalog | `["#059669", "#10B981"]` |
+| Services | `["#D97706", "#F59E0B"]` |
+| Tools | `["#7C3AED", "#8B5CF6"]` |
+| Profile | `["#DC2626", "#EF4444"]` |
 
-**TypeScript & Composite Projects:**
-All packages extend a base `tsconfig.json` with `composite: true`, enabling project references for cross-package type-checking and build ordering. `tsc --build --emitDeclarationOnly` is used for type checking and declaration file generation, with actual JS bundling handled by esbuild/tsx/vite.
+## Feature Color Gradients
+| Feature | Gradient |
+|---------|----------|
+| Blue (Catalog/Default) | `["#1E40AF", "#3B82F6"]` |
+| Green (Service/Success) | `["#059669", "#10B981"]` |
+| Amber (Quotation/Warning) | `["#D97706", "#F59E0B"]` |
+| Purple (AMC/Premium) | `["#7C3AED", "#8B5CF6"]` |
+| Red (Support/Urgent) | `["#DC2626", "#EF4444"]` |
+| Cyan (Parts/Tools) | `["#0284C7", "#0EA5E9"]` |
+| Pink (Community) | `["#DB2777", "#EC4899"]` |
 
-**API Server (`artifacts/api-server`):**
-- Built with Express 5, handling routes for health checks, CRUD operations on machines, visualizations, admin settings, viewer data, and object storage.
-- Utilizes `@workspace/db` for persistence and `@workspace/api-zod` for request/response validation.
-- GCS client wrapper (`objectStorage.ts`) is used for Replit Object Storage, with an ACL framework (`objectAcl.ts`) for access control.
-- Routes are organized under `src/routes/`.
+## Typography
+- **Font:** Inter (400 Regular, 500 Medium, 600 SemiBold, 700 Bold)
+- Loaded via `@expo-google-fonts/inter`
 
-**Database (`lib/db`):**
-- Drizzle ORM with PostgreSQL.
-- Defines schemas for `machines`, `machineVisualizations`, and `adminSettings`.
-- `drizzle.config.ts` handles Drizzle Kit configuration.
+## Shadows & 3D Effects
+- `constants/shadows.ts` — `shadow3D()`, `shadowGlow()`, `shadowInset()` utilities
+- Presets: `CARD_SHADOW`, `CARD_SHADOW_LG`, `CARD_SHADOW_XL`, `BUTTON_SHADOW`, `ICON_SHADOW`
+- USE THESE on every card, button, and icon container
 
-**API Specification & Codegen (`lib/api-spec`, `lib/api-zod`, `lib/api-client-react`):**
-- `lib/api-spec` contains the OpenAPI 3.1 specification (`openapi.yaml`) and Orval configuration.
-- Codegen generates:
-    - React Query hooks and a fetch client into `lib/api-client-react/src/generated/`.
-    - Zod schemas for validation into `lib/api-zod/src/generated/`.
+## Component Patterns
+- `AnimatedPressable` with `scaleDown` prop for micro-interactions (use everywhere for tappable items)
+- `expo-linear-gradient` for gradient icons, buttons, headers, badges
+- Dark navy gradient headers (`#0F172A → #1E293B`) on major screens
+- `HomeSkeleton` shimmer loading prevents content flash
+- Pull-to-refresh on scrollable screens
+- All list items wrapped in `React.memo`
+- `useMemo`, `useCallback`, `useDebounce` for performance
+- Static data arrays marked `as const`
 
-**Mobile Application (`artifacts/mobile`):**
-- **Platform:** Expo React Native (SDK 54) with Expo Router v6 and NativeTabs (iOS 26+).
-- **Branding:** **Sai Rolotech**, targeting B2B industrial roll forming machine manufacturers.
-- **UI/UX:**
-    - **Color Theme:** Industrial Blue (`#1A56DB`), Navy background (`#0F172A`), Electric Blue accent (`#0EA5E9`).
-    - **Typography:** Inter font.
-    - **3D Design System:** Custom shadow utilities (`shadow3D`, `shadowGlow`, `shadowInset`) and presets, extensive use of `expo-linear-gradient` for UI elements, `AnimatedPressable` for micro-interactions, `HomeSkeleton` for shimmer loading.
-    - **Performance:** Centralized memoized theme hook, `React.memo` for list items, `useMemo`, `useCallback`, `useDebounce` for optimization. Static data arrays are `as const`.
-- **Key Features:**
-    - **Authentication:** 3 login methods (Email+Password, PIN, Biometric/Face ID), role selection (machine_user, supplier, vendor, job_seeker, employer).
-    - **Role-Based Dashboards:** Tailored dashboards for suppliers, vendors, job seekers, and employers.
-    - **Community System:** Feed with post types, anti-spam rules, ads, and interactive elements.
-    - **Machine Catalog:** Searchable catalog with detailed machine information, photo galleries, video cards, specifications, and accessories.
-    - **Business Tools:** ROI, EMI, GST, RF calculators.
-    - **Forms:** Service requests, quotation requests, AMC plan enrollment, support tickets.
-    - **AI Sales Engines:**
-        - **Lead Management:** Dashboard with Hot/Warm/Cold qualification, source tracking (IndiaMART, JustDial, TradeIndia, DirectCall, App, WhatsApp, Website, Referral), follow-up reminders, call/WhatsApp quick actions. Routes: `/leads`, `/add-lead`. Data: `data/leads.ts`.
-        - **AI Sales Buddy:** Step-by-step chatbot (machine type → thickness → capacity → budget → location → AI recommendation with specs + price estimate + lead auto-capture). Route: `/ai-sales-buddy`.
-        - **AI Problem Finder (Troubleshooter):** Keyword search across 8 common machine problems with causes, solutions, urgency levels, and maintenance schedules. Route: `/ai-troubleshooter`. Data: `data/troubleshooting.ts`.
-        - **Spare Parts Catalog:** 12 parts searchable by name/model, category filter (Rollers, Bearings, Cutting Blades, Hydraulic, Electrical, Shafts), availability badges (In Stock/Made to Order/Low Stock), Enquire/Order actions. Route: `/spare-parts`. Data: `data/spare-parts.ts`.
-- **Data:** All application data is currently local/static.
+## Icon Rules
+- Use `Feather` icons from `@expo/vector-icons`
+- **CRITICAL:** Feather has NO "wrench" icon — use `"tool"` instead
+- Common icons: tool, shield, file-text, message-circle, cpu, box, trending-up, alert-circle, users, package, bar-chart-2, phone, chevron-right
 
-**Admin Panel (`artifacts/admin`):**
-- **Platform:** React, Vite, TailwindCSS, wouter.
-- **UI/UX:** Industrial premium design with a clean white background, blueprint-inspired accents, and technical iconography.
-- **Key Features:**
-    - **Dashboard:** Overview of machines and assets.
-    - **Machines Management:** Registry table, machine creation, and asset management.
-    - **Machine Detail:** Machine info, drag-and-drop file upload for 2D (SVG, PNG, max 10MB) and 3D (GLB, GLTF, OBJ, max 50MB) assets, inline 2D preview, asset deletion.
-    - **Settings:** Global toggles for visualization features (2D/3D View, Animation, Part Highlight, Technical Drawing Download).
-- **File Upload:** Uses multer for file uploads, storing them in `/uploads` and serving them statically at `/api/uploads`.
+---
 
-# External Dependencies
+# COMPLETE SCREEN INVENTORY
 
-- **Database:** PostgreSQL
-- **Object Storage:** Google Cloud Storage (via Replit Object Storage)
-- **API Codegen:** Orval
-- **Validation Library:** Zod
-- **Database ORM:** Drizzle ORM
-- **Mobile Development Framework:** Expo, React Native
-- **Frontend Libraries:** React, React Query, wouter (for admin), `@shopify/flash-list` (for mobile virtualization), `react-dropzone` (for admin file uploads), `lucide-react` (icons for admin)
-- **Styling:** TailwindCSS (for admin)
-- **Utility Libraries:** `multer` (for file uploads in api-server)
-- **GitHub:** (for mobile app source code reference)
+## Root Layout (`app/_layout.tsx`)
+All routes registered here with presentation type:
 
-### `lib/db` (`@workspace/db`)
+### Tab Screens (`app/(tabs)/`)
+| File | Screen | Description |
+|------|--------|-------------|
+| `_layout.tsx` | Tab Bar | 5 tabs: Home, Catalog, Services, Tools, Profile. iOS 26+ NativeTabs with liquid glass, fallback to classic Tabs+BlurView |
+| `index.tsx` | Home | Dark gradient header, stats row (50+ Machines, 500+ Clients, 15+ Years), premium supplier banner ads carousel, **9 Quick Actions** grid, WhatsApp CTA |
+| `catalog.tsx` | Catalog | Machine catalog with search, category filter chips, 8 machines displayed with FlashList |
+| `services.tsx` | Services | **6 service cards** (Service Request, AMC, Quotation, Support Ticket, AI Problem Finder, Spare Parts) + AMC plan cards + emergency contact |
+| `tools.tsx` | Tools | 4 business calculators: ROI, EMI, GST, RF |
+| `profile.tsx` | Profile | Company profile, contact info, quick links |
 
-Database layer using Drizzle ORM with PostgreSQL. Exports a Drizzle client instance and schema models.
+### Quick Actions on Home (9 buttons, in order):
+1. AI Sales Buddy → `/ai-sales-buddy`
+2. Machine Catalog → `/catalog`
+3. Lead Dashboard → `/leads`
+4. Get Quote → `/quotation`
+5. Spare Parts → `/spare-parts`
+6. Problem Finder → `/ai-troubleshooter`
+7. Community Feed → `/community`
+8. Service Request → `/service-request`
+9. Business Tools → `/tools`
 
-- `src/index.ts` — creates a `Pool` + Drizzle instance, exports schema
-- `src/schema/index.ts` — barrel re-export of all models
-- `src/schema/machines.ts` — `machinesTable` with full specs (name, model, category, capacity, power, speed, price, etc.) + JSONB fields (tags, specs, features, applications, accessories, images, videos)
-- `src/schema/machineVisualizations.ts` — `machineVisualizationsTable` for 2D/3D file references per machine (fileType, fileUrl, objectPath, fileName, mimeType, label)
-- `src/schema/adminSettings.ts` — `adminSettingsTable` for per-machine feature toggles (enable2dView, enable3dView, enableAnimation, enablePartHighlight, enableDrawingDownload)
-- `drizzle.config.ts` — Drizzle Kit config (requires `DATABASE_URL`, automatically provided by Replit)
-- Exports: `.` (pool, db, schema), `./schema` (schema only)
+### Modal Screens (presentation: "modal")
+| File | Route | Description |
+|------|-------|-------------|
+| `service-request.tsx` | `/service-request` | Service request form with priority selection |
+| `quotation.tsx` | `/quotation` | Get quotation form |
+| `amc.tsx` | `/amc` | AMC plan enrollment (3 tiers: Basic ₹15K, Standard ₹28K, Premium ₹45K) |
+| `support-ticket.tsx` | `/support-ticket` | Support ticket with categories |
+| `create-post.tsx` | `/create-post` | New community post (5 types: Question/Photo/Problem/Promotion/Discussion) |
+| `add-lead.tsx` | `/add-lead` | Add lead form with source picker, machine interest, budget, urgency, AI qualification |
 
-Production migrations are handled by Replit when publishing. In development, we just use `pnpm --filter @workspace/db run push`, and we fallback to `pnpm --filter @workspace/db run push-force`.
+### Card Screens (presentation: "card")
+| File | Route | Description |
+|------|-------|-------------|
+| `catalog/[id].tsx` | `/catalog/:id` | Machine detail with 6 tabs: Overview, Specs, 2D View, 3D View, Videos, Quote |
+| `jobs.tsx` | `/jobs` | Job Board for seekers with search, filters, Urgent badges |
+| `hiring.tsx` | `/hiring` | Employer hiring dashboard with applicant cards and actions |
+| `supplier-dashboard.tsx` | `/supplier-dashboard` | Supplier dashboard: orders, revenue, clients |
+| `vendor-dashboard.tsx` | `/vendor-dashboard` | Vendor dashboard: inventory, demand badges |
+| `community.tsx` | `/community` | Community feed with ads, post types (All/Questions/Photos/Problems/Promotions/Discussions), comments, reports |
+| `leads.tsx` | `/leads` | Lead Dashboard: Hot/Warm/Cold stats, filter chips, lead cards with call/WhatsApp |
+| `ai-sales-buddy.tsx` | `/ai-sales-buddy` | AI chatbot: machine type → thickness → capacity → budget → location → recommendation |
+| `ai-troubleshooter.tsx` | `/ai-troubleshooter` | AI Problem Finder: 8 common problems with causes, solutions, urgency |
+| `spare-parts.tsx` | `/spare-parts` | Spare Parts: 12 parts, category filter, In Stock/Made to Order badges, Enquire/Order |
 
-### `lib/api-spec` (`@workspace/api-spec`)
+### Auth Screens (`app/auth/`)
+| File | Route | Description |
+|------|-------|-------------|
+| `_layout.tsx` | Auth layout | Auth stack |
+| `login.tsx` | `/auth/login` | 3 login methods: Email+Password, PIN, Biometric. Role selector. SR branding |
+| `register.tsx` | `/auth/register` | Registration with role chips, personal info, company, password |
+| `forgot-password.tsx` | `/auth/forgot-password` | 4-step OTP recovery: Phone → OTP → New Password → Success |
 
-Owns the OpenAPI 3.1 spec (`openapi.yaml`) and the Orval config (`orval.config.ts`). Running codegen produces output into two sibling packages:
+---
 
-1. `lib/api-client-react/src/generated/` — React Query hooks + fetch client
-2. `lib/api-zod/src/generated/` — Zod schemas
+# DATA FILES
 
-Run codegen: `pnpm --filter @workspace/api-spec run codegen`
+| File | Contents |
+|------|----------|
+| `data/machines.ts` | 8 machines with full specs. Models: RS-5000, TG-3000, CP-8000, TR-6000, DF-4000, SC-2000, ST-3500, ZP-7000. Categories: Rolling Shutter, False Ceiling, Door & Window, Roofing & Cladding, Purlin Systems, Solar Structure, Light Gauge. Exports: `MACHINES`, `MACHINE_DETAILS`, `CATEGORIES`, `CATEGORY_COLORS`, `MACHINE_TYPES` |
+| `data/leads.ts` | Lead types, 8 lead sources (IndiaMART, JustDial, TradeIndia, DirectCall, App, WhatsApp, Website, Referral), statuses (New, Contacted, Interested, Quote Sent, Follow Up, Negotiation, Won, Lost), `qualifyLead()` function (budget + urgency + source → Hot/Warm/Cold score), 8 sample leads |
+| `data/community.ts` | 6 community posts, 3 banner ads with gradients, sample comments, spam rules (max 3 posts/day, 24h freeze), post type filters |
+| `data/jobs.ts` | 6 industrial jobs + 5 job applicants with skills, salary, location, distance, experience |
+| `data/troubleshooting.ts` | 8 common machine problems (Sheet bending, Unusual noise, Oil leaking, Not starting, Wrong dimensions, Cutting issue, Surface scratch, Slow speed) with causes[], solutions[], urgency levels, maintenance schedules |
+| `data/spare-parts.ts` | 12 spare parts across 6 categories (Rollers, Bearings, Cutting Blades, Hydraulic, Electrical, Shafts), with price ranges, availability (In Stock/Made to Order/Low Stock), compatible machine models |
 
-### `lib/api-zod` (`@workspace/api-zod`)
+---
 
-Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used by `api-server` for response validation.
+# COMPONENTS
 
-### `lib/api-client-react` (`@workspace/api-client-react`)
+| File | Purpose |
+|------|---------|
+| `components/AnimatedPressable.tsx` | Touchable with scale-down animation (micro-interactions) |
+| `components/ErrorBoundary.tsx` | React error boundary wrapper |
+| `components/ErrorFallback.tsx` | Error fallback UI |
+| `components/KeyboardAwareScrollViewCompat.tsx` | Cross-platform keyboard-aware scroll |
+| `components/MachineViewer2D.tsx` | 2D blueprint SVG viewer with pinch-to-zoom, part annotations |
+| `components/MachineViewer3D.tsx` | Three.js 3D model viewer with rotate/zoom, part highlighting |
+| `components/Skeleton.tsx` | Shimmer loading skeleton component |
 
-Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
+# HOOKS
 
-### `artifacts/mobile` (`@workspace/mobile`)
+| File | Purpose |
+|------|---------|
+| `hooks/useTheme.ts` | Centralized memoized theme hook (colors, insets, platform detection) |
+| `hooks/useDebounce.ts` | Debounce hook for search inputs |
+| `hooks/useDeviceCapability.ts` | Device capability detection (isLowEnd, hasWebGL) |
+| `hooks/useMachineVisualization.ts` | Fetches machine visualization data + admin settings from API |
 
-Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll forming machine manufacturer.
+# CONTEXTS
 
-**Tech Stack**: Expo SDK 54, Expo Router v6, NativeTabs (iOS 26+ liquid glass), React Native
+| File | Purpose |
+|------|---------|
+| `contexts/AuthContext.tsx` | Auth state, 5 roles, demo login, login/logout/register methods |
 
-**Color Theme**: Industrial Blue (`#1A56DB`) + Navy background (`#0F172A`) + Electric Blue accent (`#0EA5E9`), Inter font
+# CONSTANTS
 
-**Auth System** (3 login methods):
-- `contexts/AuthContext.tsx` — Auth state, 5 roles (machine_user, supplier, vendor, job_seeker, employer), demo login
-- `auth/login.tsx` — Premium login with SR branding, role selector, Email+Password, PIN entry, Biometric/Face ID buttons, trust badges (Secure/Trusted/Verified)
-- `auth/register.tsx` — Registration with role selection chips, personal info, company name, password fields
-- `auth/forgot-password.tsx` — 4-step OTP recovery: Phone → OTP (6-digit) → New Password → Success, with progress dots
+| File | Purpose |
+|------|---------|
+| `constants/shadows.ts` | 3D shadow utilities and presets |
+| `constants/colors.ts` | Color constants |
 
-**Role-Based Dashboards**:
-- `supplier-dashboard.tsx` — Green gradient header, Active Orders/Revenue/Clients stats, order cards with Pending/Shipped/Delivered status
-- `vendor-dashboard.tsx` — Amber gradient header, Products/Low Stock/Orders stats, inventory cards with demand badges (High/Medium/Low)
-- `jobs.tsx` — Job Board for seekers: dark header, search, filter (Distance/Salary/Experience), job cards with Urgent badges, location distance, skills tags, Apply Now
-- `hiring.tsx` — Red gradient Hiring Dashboard: applicant stats, status filters (New/Shortlisted/Interview/Rejected), applicant cards with avatar, skills, Shortlist/Reject/Call actions
+---
 
-**Community System** (Ads, Feed, Anti-Spam):
-- `community.tsx` — Community feed with rotating supplier banner ads carousel, post cards (author avatar/verified/premium badges, trust stars), post type filter chips (All/Questions/Photos/Problems/Promotions/Discussions), like/comment/share actions, comment modal (slide-up sheet with send), report modal (5 report reasons), Google Ad slots between posts, sponsored post cards with amber border + WhatsApp chat button
-- `create-post.tsx` — New post creation with post type selector (Ask Question/Share Photo/Report Problem/Promotion/Discussion), content textarea with 1000 char limit, photo upload placeholder (max 4), machine tag chips (RS-5000, TG-3000, etc.), anti-spam community guidelines notice (max 3 posts/day, 24h freeze)
-- `data/community.ts` — 6 community posts (with machine/supplier tags, images), 3 banner ads with gradients, sample comments, spam rules config, post type filter types
+# AI SALES ENGINES (Machine Category → Model Mapping)
 
-**Data**:
-- `data/jobs.ts` — 6 industrial jobs + 5 job applicants with skills, salary, location, distance, experience data
+The AI Sales Buddy maps user-selected categories to actual machine models:
 
-**Screens**:
-- `(tabs)/index.tsx` — Home dashboard with premium supplier banner ads carousel, quick actions (including Community Feed), stats, feature list, WhatsApp CTA
-- `(tabs)/catalog.tsx` — Machine catalog with search, category filter, 8 machines
-- `(tabs)/services.tsx` — Service overview + AMC plan cards + emergency contact
-- `(tabs)/tools.tsx` — 4 business calculators (ROI, EMI, GST, RF)
-- `(tabs)/profile.tsx` — Company profile, contact info, quick links
-- `catalog/[id].tsx` — Machine detail with tabbed layout (Overview, Specs, 2D View, 3D View, Videos, Quote). Tabs are admin-controlled via API settings. 2D View renders blueprint-style SVG technical drawings with labeled part annotations (Entry Gate, Main Base, Roll Shaft, Gear Drive, Cutting System) and pinch-to-zoom/pan gestures. 3D View renders interactive Three.js scene with rotate/zoom controls and part highlighting on click. Device capability detection auto-hides 3D tab on non-WebGL devices. Overview tab includes photo gallery, description, applications, features, accessories, warranty, and service CTA
-- `service-request.tsx` — Service request form (modal) with priority selection
-- `quotation.tsx` — Get quotation form (modal)
-- `amc.tsx` — AMC plan enrollment (modal) with 3-tier plan selection
-- `support-ticket.tsx` — Support ticket form (modal) with categories
+| Category | Model Code(s) |
+|----------|---------------|
+| Roofing Sheet | RS-5000 |
+| False Ceiling / T-Grid | TG-3000 |
+| C-Purlin / Z-Purlin | CP-8000, ZP-7000 |
+| Trapezoidal Sheet | TR-6000 |
+| Door Frame | DF-4000 |
+| Solar Channel | SC-2000 |
+| Stud & Track | ST-3500 |
+| Rolling Shutter | RS-5000 |
 
-**3D Design System** (Figma-quality):
-- `constants/shadows.ts` — `shadow3D()`, `shadowGlow()`, `shadowInset()` utilities + `CARD_SHADOW`, `CARD_SHADOW_LG`, `CARD_SHADOW_XL`, `BUTTON_SHADOW`, `ICON_SHADOW` presets
-- `expo-linear-gradient` — Gradient icons, buttons, headers, badges, CTA banners across all screens
-- Dark navy gradient headers (`#0F172A → #1E293B`) on Home and Profile screens
-- Color-coded gradient pairs per feature: Blue `["#1E40AF","#3B82F6"]`, Green `["#059669","#10B981"]`, Amber `["#D97706","#F59E0B"]`, Purple `["#7C3AED","#8B5CF6"]`, Red `["#DC2626","#EF4444"]`
-- `AnimatedPressable` with `scaleDown` prop for Instagram-style micro-interactions
-- `@shopify/flash-list` in catalog for virtualized performance
-- `HomeSkeleton` shimmer loading (80ms) prevents content flash
-- Pull-to-refresh on Home, Catalog, Services, Profile screens
+If no model matches, shows graceful fallback message + captures lead for manual follow-up.
 
-**Performance Engine**:
-- `hooks/useTheme.ts` — Centralized memoized theme hook (colors, insets, platform detection) — single source of truth, prevents redundant re-renders
-- `data/machines.ts` — Centralized machine data with typed exports (`MACHINES`, `MACHINE_DETAILS`, `CATEGORIES`, `CATEGORY_COLORS`, `MACHINE_TYPES`). Each `MachineDetail` includes: `images[]` (url, label, type), `videos[]` (title, duration, youtubeId, type), `detailedDescription`, `applications[]`, `accessories[]`, `warranty`
-- All list items wrapped in `React.memo` (MachineCard, ActionCard, FeatureCard, StatCard, ServiceCard, AmcCard, CategoryChip, SpecRow, etc.)
-- `useMemo` for filtered/computed data (catalog search, calculator results, plan lookups)
-- `useCallback` for all event handlers to prevent unnecessary child re-renders
-- `useDebounce` hook for search input optimization
-- Static data arrays marked `as const` for type narrowing and immutability
-- Stack screen options extracted to module-level constants to prevent re-creation
+Lead Qualification Logic (`qualifyLead()` in `data/leads.ts`):
+- **Hot 🔥**: Budget ≥ ₹5L + Urgency Immediate/ThisWeek + Source = IndiaMART/JustDial
+- **Warm ☀️**: Budget ≥ ₹3L OR Urgency ThisMonth
+- **Cold ❄️**: Everything else
 
-**Key Notes**:
-- Uses `isLiquidGlassAvailable()` for iOS 26+ NativeTabs, falls back to classic Tabs with BlurView
-- Machine visualization data and admin feature settings are fetched from API (`/api/machines/:id/visualization`, `/api/machines/admin-settings`). Other data is local/static
-- All forms show local success states after submission
-- GitHub repo: https://github.com/sairolotech-source/CRM
+---
 
-### `artifacts/admin` (`@workspace/admin`)
+# SYSTEM ARCHITECTURE
 
-React + Vite admin panel for machine visualization management at `/admin/`.
+## Monorepo Structure
+```
+artifacts/
+  api-server/     — Express 5 API (machines CRUD, visualization, admin settings, object storage)
+  mobile/         — Expo React Native app (this document covers this extensively)
+  admin/          — React+Vite admin panel (machine management, 2D/3D upload, settings)
+  mockup-sandbox/ — Component preview server for canvas
+lib/
+  api-spec/       — OpenAPI 3.1 spec + Orval codegen config
+  api-client-react/ — Generated React Query hooks + fetch client
+  api-zod/        — Generated Zod schemas
+  db/             — Drizzle ORM + PostgreSQL schemas
+scripts/          — Utility scripts
+```
 
-**Pages**:
-- Dashboard (`/admin/`) — Overview with total machines, 2D/3D asset counts, recently added machines
-- Machines (`/admin/machines`) — Registry table with search, create machine form, manage assets links
-- Machine Detail (`/admin/machines/:id`) — Machine info, drag-and-drop file upload for 2D (SVG, PNG) and 3D (GLB, GLTF, OBJ) assets, inline 2D preview, asset deletion
-- Settings (`/admin/settings`) — Global toggle switches for 5 visualization features (2D View, 3D View, Animation, Part Highlight, Technical Drawing Download)
+## Core Technologies
+- **pnpm workspaces** monorepo, **Node.js v24**, **TypeScript v5.9**
+- **Express 5** API, **PostgreSQL + Drizzle ORM**, **Zod v4** validation
+- **Expo SDK 54** + Expo Router v6 + NativeTabs (iOS 26+)
+- **Orval** codegen from OpenAPI spec
 
-**Tech**: React, Vite, TailwindCSS, wouter, React Query, react-dropzone, lucide-react icons
-**Design**: Industrial premium — clean white background, blueprint-inspired accents, technical iconography
+## Database Tables (lib/db/src/schema/)
+- `machines` — id, name, model, description, JSONB fields (tags, specs, features, applications, accessories, images, videos)
+- `machineVisualizations` — 2D/3D file references per machine
+- `adminSettings` — Per-machine feature toggles (enable2dView, enable3dView, etc.)
 
-**Database Tables** (lib/db/src/schema/):
-- `machines` — id, name, model, description, created_at, updated_at
-- `visualization_assets` — id, machine_id (FK), asset_type (2d/3d), file_name, file_size, mime_type, display_name, file_path, created_at
-- `visualization_settings` — id, enable_2d_view, enable_3d_view, enable_animation, enable_part_highlight, enable_technical_drawing_download, updated_at
+## API Routes (artifacts/api-server/src/routes/)
+- `machines.ts` — CRUD for machines
+- `visualization-assets.ts` — Asset upload/delete (multer, /uploads directory)
+- `visualization-settings.ts` — Global visualization settings
 
-**API Routes** (artifacts/api-server/src/routes/):
-- `machines.ts` — CRUD for machines (GET/POST /machines, GET/PATCH/DELETE /machines/:id)
-- `visualization-assets.ts` — Asset management (GET /machines/:id/assets, POST /machines/:id/assets/upload, DELETE /machines/:id/assets/:assetId). Uses multer for file uploads to /uploads directory
-- `visualization-settings.ts` — Global settings (GET/PUT /visualization-settings). Auto-creates default settings row on first access
+## Admin Panel (`artifacts/admin`)
+- Dashboard, Machines Management, Machine Detail (drag-drop 2D/3D upload), Settings
+- Tech: React, Vite, TailwindCSS, wouter, React Query, react-dropzone, lucide-react
 
-**File Upload**: multer stores files in /uploads, served statically at /api/uploads. 2D max 10MB (SVG, PNG), 3D max 50MB (GLB, GLTF, OBJ)
+## Machine Visualization
+- 2D: SVG/PNG from API with zoom/pan + fallback blueprint with part annotations
+- 3D: GLB/GLTF via Three.js + GLTFLoader with part highlighting, fallback procedural scene
+- Admin settings control which tabs are visible per machine
+- Low-end device auto-hides 3D tab
 
-### `scripts` (`@workspace/scripts`)
+---
 
-Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
+# EXTERNAL DEPENDENCIES
+
+- PostgreSQL, Google Cloud Storage (Replit Object Storage)
+- Orval (codegen), Zod (validation), Drizzle ORM
+- Expo, React Native, React Query
+- `@shopify/flash-list`, `expo-linear-gradient`, `expo-haptics`
+- TailwindCSS (admin), wouter (admin routing)
+- multer (file uploads), lucide-react (admin icons)
+- GitHub integration configured
+
+---
+
+# KEY NOTES & GOTCHAS
+
+1. **All mobile data is currently local/static** — no API calls except machine visualization + admin settings
+2. **Feather icons have NO "wrench"** — always use `"tool"`
+3. **`shadow*` style props are deprecated** in React Native Web — use `boxShadow` (warning only, still works)
+4. Machine visualization data comes from API, everything else is in `data/` files
+5. Community anti-spam: max 3 posts/day, 24h cooldown on spam detection
+6. Auth is demo/local — no real backend auth yet
+7. iOS 26+ gets liquid glass NativeTabs, older iOS/Android gets classic tab bar with BlurView
+8. `isLiquidGlassAvailable()` for tab detection
+9. AMC Plans: Basic ₹15K/yr, Standard ₹28K/yr (popular), Premium ₹45K/yr
+10. Expo dev URL: check workflow logs for current URL
+
+---
+
+# PENDING / FUTURE WORK
+
+- T004: Quotation Preview + Auto Follow-up system
+- T005: Admin Analytics Enhancement
+- T006: Full integration testing & cleanup (partially done — routes registered, home updated)
+- Station Calculator (was listed in T003 but not yet built)
+- Backend auth system (currently demo/local)
+- Real API integration for leads, community, jobs, spare parts
