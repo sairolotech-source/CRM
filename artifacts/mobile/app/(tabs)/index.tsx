@@ -181,7 +181,7 @@ export default function HomeScreen() {
               Welcome to
             </Text>
             <Text style={[styles.headerTitle, { fontFamily: "Inter_700Bold" }]}>
-              Sai Rolotech
+              App Pro
             </Text>
             <Text style={[styles.headerSubtitle, { fontFamily: "Inter_400Regular" }]}>
               Industrial Roll Forming Solutions

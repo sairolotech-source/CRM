@@ -16,7 +16,7 @@ import * as Haptics from "expo-haptics";
 import Colors from "@/constants/colors";
 
 const COMPANY_INFO = {
-  name: "Sai Rolotech",
+  name: "App Pro",
   tagline: "Industrial Roll Forming Solutions",
   established: "2009",
   location: "Rajkot, Gujarat, India",
@@ -25,7 +25,7 @@ const COMPANY_INFO = {
   website: "www.sairolotech.com",
   gst: "24XXXXXX1234X1Z5",
   description:
-    "Sai Rolotech is a leading manufacturer of industrial roll forming machines based in Rajkot, Gujarat. We have been serving the steel fabrication industry since 2009 with precision-engineered machinery and exceptional after-sales service.",
+    "App Pro is a leading manufacturer of industrial roll forming machines based in Rajkot, Gujarat. We have been serving the steel fabrication industry since 2009 with precision-engineered machinery and exceptional after-sales service.",
 };
 
 const MENU_ITEMS = [
@@ -92,7 +92,7 @@ export default function ProfileScreen() {
       >
         <View style={styles.logoContainer}>
           <View style={styles.logoCircle}>
-            <Text style={[styles.logoText, { fontFamily: "Inter_700Bold" }]}>SR</Text>
+            <Text style={[styles.logoText, { fontFamily: "Inter_700Bold" }]}>AP</Text>
           </View>
         </View>
         <Text style={[styles.companyName, { fontFamily: "Inter_700Bold" }]}>
@@ -210,7 +210,7 @@ export default function ProfileScreen() {
       {/* Version */}
       <View style={styles.versionRow}>
         <Text style={[styles.versionText, { color: colors.textMuted, fontFamily: "Inter_400Regular" }]}>
-          Sai Rolotech Mobile v1.0.0
+          App Pro v1.0.0
         </Text>
       </View>
     </ScrollView>
