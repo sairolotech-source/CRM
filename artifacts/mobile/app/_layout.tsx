@@ -41,6 +41,11 @@ const RootLayoutNav = React.memo(function RootLayoutNav() {
       <Stack.Screen name="vendor-dashboard" options={CARD_OPTS} />
       <Stack.Screen name="community" options={CARD_OPTS} />
       <Stack.Screen name="create-post" options={MODAL_OPTS} />
+      <Stack.Screen name="leads" options={CARD_OPTS} />
+      <Stack.Screen name="add-lead" options={MODAL_OPTS} />
+      <Stack.Screen name="ai-sales-buddy" options={CARD_OPTS} />
+      <Stack.Screen name="ai-troubleshooter" options={CARD_OPTS} />
+      <Stack.Screen name="spare-parts" options={CARD_OPTS} />
     </Stack>
   );
 });

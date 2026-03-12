@@ -20,6 +20,8 @@ const SERVICES = [
   { id: "amc", title: "AMC Plans", subtitle: "Annual maintenance contract packages", icon: "shield", color: "#8B5CF6", gradient: ["#7C3AED", "#8B5CF6"], route: "/amc" },
   { id: "quotation", title: "Get Quotation", subtitle: "Request pricing for a new machine", icon: "file-text", color: "#F59E0B", gradient: ["#D97706", "#F59E0B"], route: "/quotation" },
   { id: "support", title: "Support Ticket", subtitle: "Raise a complaint or technical query", icon: "message-circle", color: "#EF4444", gradient: ["#DC2626", "#EF4444"], route: "/support-ticket" },
+  { id: "troubleshooter", title: "AI Problem Finder", subtitle: "Describe problem, get instant solutions", icon: "cpu", color: "#DC2626", gradient: ["#DC2626", "#EF4444"], route: "/ai-troubleshooter" },
+  { id: "spare-parts", title: "Spare Parts", subtitle: "Find rollers, bearings, blades & more", icon: "box", color: "#0EA5E9", gradient: ["#0284C7", "#0EA5E9"], route: "/spare-parts" },
 ] as const;
 
 const AMC_PLANS = [

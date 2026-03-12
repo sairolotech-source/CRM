@@ -1,0 +1,289 @@
+Aap **SAI ROLOTECH** ke liye **“Super Premium Quotation Engine”** banana chahte ho jo:
+
+* Client details se **automatic quotation banaye**
+* **Date, time, machine details** add kare
+* **Purani quotation file upload** karne par **same style me nayi quotation generate kare**
+* Free, Simple aur Premium version ho
+
+Neeche **clear blueprint + Replit prompt** de raha hoon.
+
+---
+
+# SAI ROLOTECH – QUOTATION ENGINE (SUPER PREMIUM)
+
+## 1️⃣ Engine Levels
+
+### 🔹 Level 1 – Simple (Free)
+
+Basic quotation generator.
+
+Features:
+
+* Client name
+* Machine name
+* Price
+* GST
+* Delivery time
+* Simple PDF export
+
+Output: basic quotation.
+
+---
+
+### 🔹 Level 2 – Business (Paid)
+
+Professional quotation builder.
+
+Features:
+
+* Company logo
+* Client database
+* Multiple machine list
+* Auto GST calculation
+* Delivery terms
+* Payment terms
+* Discount system
+* PDF + share link
+
+---
+
+### 🔹 Level 3 – Super Premium Engine (SAI ROLOTECH)
+
+Yeh **AI based quotation engine** hoga.
+
+Features:
+
+### 🧠 Smart quotation generator
+
+AI automatically generate karega:
+
+* Client name
+* Machine type
+* Roll forming model
+* Accessories
+* Price calculation
+* Installation cost
+* Transport cost
+
+---
+
+### 📂 Old quotation learning system
+
+User agar **purani quotation upload kare (PDF / DOC)**
+
+Engine:
+
+1. Format analyze karega
+2. Company style samjhega
+3. Wesa hi **new quotation template bana dega**
+
+Example:
+
+Upload kiya:
+
+```
+Sai Rolotech Quotation
+Machine: C Purlin Machine
+Price: ₹12,50,000
+Delivery: 45 Days
+```
+
+Engine future me **same style use karega**.
+
+---
+
+### ⏱ Smart time stamping
+
+Automatically add karega:
+
+* Date
+* Time
+* Quotation number
+* Client ID
+
+Example:
+
+```
+Quotation No: SR-2026-0045
+Date: 13 March 2026
+Time: 04:30 PM
+```
+
+---
+
+### 🤖 AI suggestion system
+
+Engine suggest karega:
+
+Example:
+
+Client:
+
+```
+Roofing Sheet Machine
+```
+
+AI suggestion:
+
+```
+Recommended:
+Double layer machine
+Hydraulic decoiler
+Stacker system
+```
+
+---
+
+### 📊 Smart price calculator
+
+Automatically calculate:
+
+```
+Machine price
++
+GST
++
+Transport
++
+Installation
+=
+Total
+```
+
+---
+
+### 📤 Share system
+
+User directly share kar sakta hai:
+
+* WhatsApp
+* Email
+* Download PDF
+* Share link
+
+---
+
+### 🔐 Security
+
+Supplier apni quotation **copy protect** kar sakta hai.
+
+Options:
+
+* Watermark
+* Expiry date
+* View only link
+
+---
+
+# Database Structure
+
+Tables:
+
+### Clients
+
+```
+client_id
+name
+company
+phone
+email
+location
+```
+
+### Machines
+
+```
+machine_id
+machine_name
+model
+price
+category
+```
+
+### Quotations
+
+```
+quotation_id
+client_id
+machine_id
+price
+gst
+total
+date
+time
+status
+```
+
+---
+
+# Replit Super Prompt
+
+Use this in **Replit AI / Agent**
+
+```
+Build an AI powered quotation engine for SAI ROLOTECH roll forming machines.
+
+The system must include 3 levels:
+
+1 Free basic quotation generator
+2 Business professional quotation builder
+3 Super Premium AI quotation engine
+
+Features required:
+
+Client database
+Machine database
+Smart price calculator
+GST calculation
+Delivery and payment terms
+PDF quotation generator
+Quotation number generator
+Date and time stamping
+Share via link and WhatsApp
+
+Premium AI features:
+
+Upload old quotation PDF or DOC file
+AI analyzes the document layout and style
+System learns the quotation format
+Future quotations automatically follow same structure
+
+AI must also suggest machines, accessories and pricing based on client requirements.
+
+The UI must be extremely professional, clean and fast.
+Animations smooth and premium like top business SaaS tools.
+
+Tech stack:
+Frontend React
+Backend Node.js
+Database Firebase or Supabase
+PDF generation engine
+AI parsing system for document learning.
+
+The engine must be scalable for suppliers, machine users and admin.
+```
+
+---
+
+💡 **Pro idea (bahut powerful)**
+Is engine ko aap **Roll Forming Industry ke liye SaaS bana sakte ho**.
+
+Matlab:
+
+* supplier subscription dega
+* quotation tool use karega
+
+Industry me **ye bahut bik sakta hai**.
+
+---
+
+Agar chaho to mai next step me:
+
+**“World Class AI Quotation Engine Architecture”** bana sakta hoon jisme
+
+* Auto negotiation AI
+* Auto price suggestion
+* Auto follow up system
+
+ye sab hoga.
+Ye **SAI ROLOTECH ko industry ka Tesla bana sakta hai.**

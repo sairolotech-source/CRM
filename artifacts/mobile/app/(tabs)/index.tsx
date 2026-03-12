@@ -29,11 +29,14 @@ const { width: SCREEN_W } = Dimensions.get("window");
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
 const QUICK_ACTIONS = [
+  { id: "ai-buddy", label: "AI Sales\nBuddy", icon: "cpu" as const, route: "/ai-sales-buddy", color: "#059669", gradient: ["#059669", "#10B981"] },
   { id: "catalog", label: "Machine\nCatalog", icon: "package" as const, route: "/catalog", color: "#1A56DB", gradient: ["#1A56DB", "#3B82F6"] },
-  { id: "service", label: "Service\nRequest", icon: "tool" as const, route: "/service-request", color: "#10B981", gradient: ["#059669", "#10B981"] },
+  { id: "leads", label: "Lead\nDashboard", icon: "trending-up" as const, route: "/leads", color: "#EF4444", gradient: ["#DC2626", "#EF4444"] },
   { id: "quotation", label: "Get\nQuote", icon: "file-text" as const, route: "/quotation", color: "#F59E0B", gradient: ["#D97706", "#F59E0B"] },
-  { id: "amc", label: "AMC\nPlans", icon: "shield" as const, route: "/amc", color: "#8B5CF6", gradient: ["#7C3AED", "#8B5CF6"] },
-  { id: "community", label: "Community\nFeed", icon: "users" as const, route: "/community", color: "#EF4444", gradient: ["#DC2626", "#EF4444"] },
+  { id: "spare-parts", label: "Spare\nParts", icon: "box" as const, route: "/spare-parts", color: "#0EA5E9", gradient: ["#0284C7", "#0EA5E9"] },
+  { id: "troubleshoot", label: "Problem\nFinder", icon: "alert-circle" as const, route: "/ai-troubleshooter", color: "#8B5CF6", gradient: ["#7C3AED", "#8B5CF6"] },
+  { id: "community", label: "Community\nFeed", icon: "users" as const, route: "/community", color: "#EC4899", gradient: ["#DB2777", "#EC4899"] },
+  { id: "service", label: "Service\nRequest", icon: "tool" as const, route: "/service-request", color: "#10B981", gradient: ["#059669", "#10B981"] },
   { id: "tools", label: "Business\nTools", icon: "bar-chart-2" as const, route: "/tools", color: "#0EA5E9", gradient: ["#0284C7", "#0EA5E9"] },
 ] as const;
 
