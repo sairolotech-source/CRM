@@ -121,11 +121,16 @@ Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll form
 - `jobs.tsx` — Job Board for seekers: dark header, search, filter (Distance/Salary/Experience), job cards with Urgent badges, location distance, skills tags, Apply Now
 - `hiring.tsx` — Red gradient Hiring Dashboard: applicant stats, status filters (New/Shortlisted/Interview/Rejected), applicant cards with avatar, skills, Shortlist/Reject/Call actions
 
+**Community System** (Ads, Feed, Anti-Spam):
+- `community.tsx` — Community feed with rotating supplier banner ads carousel, post cards (author avatar/verified/premium badges, trust stars), post type filter chips (All/Questions/Photos/Problems/Promotions/Discussions), like/comment/share actions, comment modal (slide-up sheet with send), report modal (5 report reasons), Google Ad slots between posts, sponsored post cards with amber border + WhatsApp chat button
+- `create-post.tsx` — New post creation with post type selector (Ask Question/Share Photo/Report Problem/Promotion/Discussion), content textarea with 1000 char limit, photo upload placeholder (max 4), machine tag chips (RS-5000, TG-3000, etc.), anti-spam community guidelines notice (max 3 posts/day, 24h freeze)
+- `data/community.ts` — 6 community posts (with machine/supplier tags, images), 3 banner ads with gradients, sample comments, spam rules config, post type filter types
+
 **Data**:
 - `data/jobs.ts` — 6 industrial jobs + 5 job applicants with skills, salary, location, distance, experience data
 
 **Screens**:
-- `(tabs)/index.tsx` — Home dashboard with quick actions, stats, feature list, WhatsApp CTA
+- `(tabs)/index.tsx` — Home dashboard with premium supplier banner ads carousel, quick actions (including Community Feed), stats, feature list, WhatsApp CTA
 - `(tabs)/catalog.tsx` — Machine catalog with search, category filter, 8 machines
 - `(tabs)/services.tsx` — Service overview + AMC plan cards + emergency contact
 - `(tabs)/tools.tsx` — 4 business calculators (ROI, EMI, GST, RF)

@@ -39,6 +39,8 @@ const RootLayoutNav = React.memo(function RootLayoutNav() {
       <Stack.Screen name="hiring" options={CARD_OPTS} />
       <Stack.Screen name="supplier-dashboard" options={CARD_OPTS} />
       <Stack.Screen name="vendor-dashboard" options={CARD_OPTS} />
+      <Stack.Screen name="community" options={CARD_OPTS} />
+      <Stack.Screen name="create-post" options={MODAL_OPTS} />
     </Stack>
   );
 });

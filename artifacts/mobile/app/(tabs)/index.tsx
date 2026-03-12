@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import {
+  Dimensions,
   View,
   Text,
   StyleSheet,
@@ -21,6 +22,9 @@ import { useTheme } from "@/hooks/useTheme";
 import AnimatedPressable from "@/components/AnimatedPressable";
 import { HomeSkeleton } from "@/components/Skeleton";
 import { CARD_SHADOW, CARD_SHADOW_LG, CARD_SHADOW_XL, shadowGlow, BUTTON_SHADOW, ICON_SHADOW } from "@/constants/shadows";
+import { BANNER_ADS } from "@/data/community";
+
+const { width: SCREEN_W } = Dimensions.get("window");
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 
@@ -29,7 +33,7 @@ const QUICK_ACTIONS = [
   { id: "service", label: "Service\nRequest", icon: "tool" as const, route: "/service-request", color: "#10B981", gradient: ["#059669", "#10B981"] },
   { id: "quotation", label: "Get\nQuote", icon: "file-text" as const, route: "/quotation", color: "#F59E0B", gradient: ["#D97706", "#F59E0B"] },
   { id: "amc", label: "AMC\nPlans", icon: "shield" as const, route: "/amc", color: "#8B5CF6", gradient: ["#7C3AED", "#8B5CF6"] },
-  { id: "support", label: "Support\nTicket", icon: "message-circle" as const, route: "/support-ticket", color: "#EF4444", gradient: ["#DC2626", "#EF4444"] },
+  { id: "community", label: "Community\nFeed", icon: "users" as const, route: "/community", color: "#EF4444", gradient: ["#DC2626", "#EF4444"] },
   { id: "tools", label: "Business\nTools", icon: "bar-chart-2" as const, route: "/tools", color: "#0EA5E9", gradient: ["#0284C7", "#0EA5E9"] },
 ] as const;
 
@@ -143,6 +147,44 @@ export default function HomeScreen() {
         </LinearGradient>
       </Animated.View>
 
+      <Animated.View entering={FadeInDown.delay(50).duration(400)} style={styles.bannerAdSection}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={SCREEN_W - 24}
+          decelerationRate="fast"
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+        >
+          {BANNER_ADS.map((item) => (
+            <AnimatedPressable
+              key={item.id}
+              style={[styles.homeBanner, CARD_SHADOW]}
+              scaleDown={0.97}
+              onPress={() => router.push("/community" as any)}
+            >
+              <LinearGradient
+                colors={item.gradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.homeBannerGradient}
+              >
+                <View style={styles.homeBannerLeft}>
+                  <View style={styles.homeBannerPremium}>
+                    <Feather name="award" size={8} color="#F59E0B" />
+                    <Text style={styles.homeBannerPremiumText}>PREMIUM SUPPLIER</Text>
+                  </View>
+                  <Text style={styles.homeBannerProduct}>{item.productName}</Text>
+                  <Text style={styles.homeBannerSupplier}>{item.supplierName}</Text>
+                </View>
+                <View style={styles.homeBannerCta}>
+                  <Feather name="arrow-right" size={16} color="#fff" />
+                </View>
+              </LinearGradient>
+            </AnimatedPressable>
+          ))}
+        </ScrollView>
+      </Animated.View>
+
       <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.section}>
         <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: "Inter_600SemiBold" }]}>Quick Actions</Text>
         <View style={styles.actionsGrid}>
@@ -246,4 +288,13 @@ const styles = StyleSheet.create({
   ctaSubtitle: { fontSize: 13, color: "rgba(255,255,255,0.7)" },
   ctaBtn: { flexDirection: "row", alignItems: "center", gap: 6, backgroundColor: "#fff", borderRadius: 12, paddingHorizontal: 14, paddingVertical: 9 },
   ctaBtnText: { color: "#0F172A", fontSize: 13 },
+  bannerAdSection: { paddingTop: 16 },
+  homeBanner: { width: SCREEN_W - 56, marginRight: 12, borderRadius: 16, overflow: "hidden" },
+  homeBannerGradient: { flexDirection: "row", alignItems: "center", padding: 16, borderRadius: 16 },
+  homeBannerLeft: { flex: 1 },
+  homeBannerPremium: { flexDirection: "row", alignItems: "center", gap: 4, backgroundColor: "rgba(0,0,0,0.2)", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, alignSelf: "flex-start", marginBottom: 6 },
+  homeBannerPremiumText: { fontSize: 8, fontWeight: "800", color: "#FDE68A", letterSpacing: 0.5 },
+  homeBannerProduct: { fontSize: 16, fontWeight: "800", color: "#fff" },
+  homeBannerSupplier: { fontSize: 12, color: "rgba(255,255,255,0.8)", marginTop: 2 },
+  homeBannerCta: { width: 36, height: 36, borderRadius: 12, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
 });
