@@ -93,7 +93,7 @@ Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHea
 
 ### `artifacts/mobile` (`@workspace/mobile`)
 
-Expo React Native mobile app for **App Pro** — a B2B industrial roll forming machine manufacturer.
+Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll forming machine manufacturer.
 
 **Tech Stack**: Expo SDK 54, Expo Router v6, NativeTabs (iOS 26+ liquid glass), React Native
 
