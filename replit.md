@@ -105,7 +105,7 @@ Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll form
 - `(tabs)/services.tsx` — Service overview + AMC plan cards + emergency contact
 - `(tabs)/tools.tsx` — 4 business calculators (ROI, EMI, GST, RF)
 - `(tabs)/profile.tsx` — Company profile, contact info, quick links
-- `catalog/[id].tsx` — Machine detail with specs, features, quote & service CTAs
+- `catalog/[id].tsx` — Machine detail with photo gallery (horizontal swipe + dots), video cards (YouTube links with play/duration/type badges), detailed description, applications tags, specs table, features, included accessories list, warranty card, service CTA
 - `service-request.tsx` — Service request form (modal) with priority selection
 - `quotation.tsx` — Get quotation form (modal)
 - `amc.tsx` — AMC plan enrollment (modal) with 3-tier plan selection
@@ -123,7 +123,7 @@ Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll form
 
 **Performance Engine**:
 - `hooks/useTheme.ts` — Centralized memoized theme hook (colors, insets, platform detection) — single source of truth, prevents redundant re-renders
-- `data/machines.ts` — Centralized machine data store with typed exports (`MACHINES`, `MACHINE_DETAILS`, `CATEGORIES`, `CATEGORY_COLORS`, `MACHINE_TYPES`) — eliminates duplication across screens
+- `data/machines.ts` — Centralized machine data with typed exports (`MACHINES`, `MACHINE_DETAILS`, `CATEGORIES`, `CATEGORY_COLORS`, `MACHINE_TYPES`). Each `MachineDetail` includes: `images[]` (url, label, type), `videos[]` (title, duration, youtubeId, type), `detailedDescription`, `applications[]`, `accessories[]`, `warranty`
 - All list items wrapped in `React.memo` (MachineCard, ActionCard, FeatureCard, StatCard, ServiceCard, AmcCard, CategoryChip, SpecRow, etc.)
 - `useMemo` for filtered/computed data (catalog search, calculator results, plan lookups)
 - `useCallback` for all event handlers to prevent unnecessary child re-renders

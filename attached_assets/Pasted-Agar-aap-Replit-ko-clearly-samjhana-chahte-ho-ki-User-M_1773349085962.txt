@@ -1,0 +1,201 @@
+Agar aap **Replit** ko clearly samjhana chahte ho ki **User / Machine User / Supplier** ke liye **Special Tools, Ads, Paid-Free Services aur Community Post Page** ka system kaise banana hai, to aapko ek **clear structured prompt** dena padega.
+
+Main aapko ek **Super Prompt** de raha hoon jo aap **Replit AI / Ghostwriter / Agent** me paste kar sakte ho.
+
+---
+
+## SUPER PROMPT FOR REPLIT (SAI ROLOTECH APP)
+
+```
+Create a powerful modular system for SAI ROLOTECH APP with three main user roles:
+
+1. MACHINE USER
+2. SUPPLIER / VENDOR
+3. NORMAL USER
+
+Each role must have separate tools, permissions and dashboard.
+
+-----------------------------------
+ROLE IDENTIFICATION SYSTEM
+-----------------------------------
+When a user signs up, ask them to select their role:
+
+• Machine Owner / Machine User
+• Supplier / Manufacturer / Vendor
+• Normal User / Visitor
+
+System should automatically show different tools based on the role.
+
+-----------------------------------
+MACHINE USER FEATURES
+-----------------------------------
+
+Provide special tools for machine users:
+
+• Machine Problem Finder Tool
+• Error Code Solution Tool
+• Maintenance Reminder
+• Spare Parts Finder
+• Machine Manual Library
+• AI Machine Assistant
+
+Free version:
+Basic tools + limited AI usage.
+
+Paid version:
+Advanced AI diagnostics
+Predictive maintenance
+Advanced machine analytics.
+
+-----------------------------------
+SUPPLIER / VENDOR FEATURES
+-----------------------------------
+
+Supplier dashboard should include:
+
+• Product listing system
+• Machine catalog creator
+• Quotation generator
+• Lead management system
+• Customer chat
+• Analytics dashboard
+• Promotion tools
+
+Paid vendor tools:
+
+• Featured listing
+• Priority leads
+• AI quotation generator
+• AI product description generator
+• Advanced analytics
+• Sponsored product ads
+
+-----------------------------------
+NORMAL USER FEATURES
+-----------------------------------
+
+• Search machines
+• Compare machines
+• View suppliers
+• Request quotations
+• Ask questions
+• Community discussions
+
+-----------------------------------
+ADS SYSTEM
+-----------------------------------
+
+Create two ad systems:
+
+1. Free listing
+Normal visibility
+
+2. Paid ads
+Featured machines
+Top search results
+Homepage banner
+Category promotion
+
+Admin must be able to:
+
+• Turn ads ON/OFF
+• Control pricing
+• Approve advertisements
+
+-----------------------------------
+COMMUNITY PAGE / POST SYSTEM
+-----------------------------------
+
+Create a community page where users can:
+
+• Post machine problems
+• Share solutions
+• Upload photos
+• Ask questions
+• Comment on posts
+• Like posts
+
+Post categories:
+
+• Machine Problems
+• Machine Setup
+• Buying Advice
+• Repair Help
+• Supplier Reviews
+
+Admin moderation required.
+
+-----------------------------------
+PAID & FREE SERVICE STRUCTURE
+-----------------------------------
+
+Free Plan:
+
+Basic tools
+Limited AI usage
+Community access
+Basic listing
+
+Pro Plan:
+
+Unlimited tools
+AI engines
+Priority support
+Advanced analytics
+Premium ads
+
+-----------------------------------
+ADMIN CONTROL PANEL
+-----------------------------------
+
+Admin must have full control:
+
+• Enable/Disable tools
+• Manage users
+• Manage suppliers
+• Control AI usage limits
+• Approve ads
+• Monitor community posts
+• Track revenue
+
+-----------------------------------
+UI REQUIREMENTS
+-----------------------------------
+
+Create a modern dashboard UI similar to top SaaS platforms.
+
+Use:
+
+Clean layout
+Category based navigation
+Icon based tools
+Fast loading interface
+Mobile responsive design.
+
+```
+
+---
+
+## Is prompt se Replit ko kya samajh aayega
+
+Isse **Replit AI ko clear structure milega:**
+
+✔ 3 type users
+✔ free vs paid system
+✔ ads system
+✔ supplier tools
+✔ machine user tools
+✔ community page
+✔ admin control
+
+---
+
+💡 Agar chaho to main **SAI ROLOTECH ke liye 15 aur powerful engines** bhi bata sakta hoon jaise:
+
+* Smart Machine Selection Engine
+* AI Quotation Engine
+* Auto Supplier Matching Engine
+* Lead Intelligence Engine
+* Smart Pricing Engine
+
+Ye aapki app ko **India ki sabse powerful machine marketplace** bana sakte hain. 🚀

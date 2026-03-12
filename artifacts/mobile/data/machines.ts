@@ -11,6 +11,22 @@ export type Machine = {
   tags: string[];
 };
 
+export type MachineImage = {
+  id: string;
+  url: string;
+  label: string;
+  type: "front" | "side" | "detail" | "output" | "panel" | "process";
+};
+
+export type MachineVideo = {
+  id: string;
+  title: string;
+  duration: string;
+  thumbnail: string;
+  youtubeId: string;
+  type: "demo" | "installation" | "maintenance" | "output";
+};
+
 export type MachineDetail = Machine & {
   weight?: string;
   dimensions?: string;
@@ -18,6 +34,12 @@ export type MachineDetail = Machine & {
   color: string;
   specs: { label: string; value: string }[];
   features: string[];
+  detailedDescription: string;
+  applications: string[];
+  images: MachineImage[];
+  videos: MachineVideo[];
+  accessories: string[];
+  warranty: string;
 };
 
 export const CATEGORIES = [
@@ -155,6 +177,37 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
     dimensions: "12m x 1.2m x 1.5m",
     rollers: "18 stages",
     color: "#1A56DB",
+    detailedDescription:
+      "The RS-5000 Rolling Shutter Machine is our flagship roll forming system designed for high-volume production of rolling shutter patti (slats). Built with precision-hardened steel rollers and powered by a 15 kW motor, this machine delivers consistent quality at 25 meters per minute. The integrated PLC control system with touchscreen HMI allows operators to set exact dimensions, count pieces, and monitor production in real-time. The automatic stacking system eliminates manual handling, reducing labor costs by up to 60%. Ideal for rolling shutter manufacturers looking to scale their production capacity with minimal downtime.",
+    applications: [
+      "Rolling shutter slat manufacturing",
+      "Industrial shutter doors",
+      "Commercial shop shutters",
+      "Garage door panels",
+      "Security shutters",
+    ],
+    images: [
+      { id: "1-1", url: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&h=600&fit=crop", label: "Full Machine View", type: "front" },
+      { id: "1-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Roller Assembly", type: "detail" },
+      { id: "1-3", url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop", label: "PLC Control Panel", type: "panel" },
+      { id: "1-4", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "Output Product", type: "output" },
+      { id: "1-5", url: "https://images.unsplash.com/photo-1537462715828-7f190ad5cd9f?w=800&h=600&fit=crop", label: "Production Line", type: "process" },
+    ],
+    videos: [
+      { id: "v1-1", title: "RS-5000 Live Demo", duration: "3:45", thumbnail: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+      { id: "v1-2", title: "Installation Guide", duration: "8:20", thumbnail: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "installation" },
+      { id: "v1-3", title: "Output Sample", duration: "1:30", thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "output" },
+    ],
+    accessories: [
+      "Hydraulic Decoiler (5 Ton)",
+      "Automatic Stacking Table",
+      "Flying Shear Cutter",
+      "PLC Control Panel with HMI",
+      "Spare Roller Set",
+      "Lubrication Kit",
+      "Safety Guards & Sensors",
+    ],
+    warranty: "2 Years Comprehensive + 5 Years Roller",
     specs: [
       { label: "Production Capacity", value: "2-4 tons/hr" },
       { label: "Machine Speed", value: "25 m/min" },
@@ -177,6 +230,33 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
   "2": {
     ...MACHINES[1],
     color: "#10B981",
+    detailedDescription:
+      "The TG-3000 T-Grid Ceiling Machine is a precision roll forming system designed for manufacturing T-Grid false ceiling sections used in commercial buildings, offices, and hospitals. The machine produces both main tee and cross tee profiles with exceptional dimensional accuracy. Its compact design makes it suitable for small to medium-scale manufacturing units while maintaining production quality comparable to larger systems. The low-noise operation makes it ideal for urban manufacturing setups.",
+    applications: [
+      "Commercial building ceilings",
+      "Office partition systems",
+      "Hospital & cleanroom ceilings",
+      "Shopping mall interiors",
+      "Modular ceiling panels",
+    ],
+    images: [
+      { id: "2-1", url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop", label: "Machine Overview", type: "front" },
+      { id: "2-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Forming Station", type: "detail" },
+      { id: "2-3", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "T-Grid Output", type: "output" },
+      { id: "2-4", url: "https://images.unsplash.com/photo-1537462715828-7f190ad5cd9f?w=800&h=600&fit=crop", label: "Control System", type: "panel" },
+    ],
+    videos: [
+      { id: "v2-1", title: "TG-3000 Production Demo", duration: "2:50", thumbnail: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+      { id: "v2-2", title: "Maintenance Tips", duration: "5:15", thumbnail: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "maintenance" },
+    ],
+    accessories: [
+      "Manual Decoiler (3 Ton)",
+      "Auto Cutter Unit",
+      "Spare Die Set (Main Tee + Cross Tee)",
+      "Punch Unit",
+      "Lubricant System",
+    ],
+    warranty: "1 Year Comprehensive + 3 Years Roller",
     specs: [
       { label: "Production Capacity", value: "1.5-2 tons/hr" },
       { label: "Machine Speed", value: "20 m/min" },
@@ -195,6 +275,36 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
   "3": {
     ...MACHINES[2],
     color: "#8B5CF6",
+    detailedDescription:
+      "The CP-8000 C-Purlin Machine is a heavy-duty roll forming system engineered for manufacturing C-shaped structural purlins used in pre-engineered buildings (PEB), warehouses, and industrial sheds. With automatic size changeover via PLC control, operators can switch between C100 to C300 profiles without manual roller adjustments, dramatically reducing downtime. The machine handles material thickness up to 3.0 mm, making it suitable for both light and heavy structural applications. The integrated hydraulic post-cut system ensures clean, burr-free cuts at full production speed.",
+    applications: [
+      "Pre-engineered buildings (PEB)",
+      "Industrial warehouses",
+      "Factory roofing structures",
+      "Agricultural storage sheds",
+      "Commercial building frames",
+    ],
+    images: [
+      { id: "3-1", url: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&h=600&fit=crop", label: "CP-8000 Full View", type: "front" },
+      { id: "3-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Roller Assembly Detail", type: "detail" },
+      { id: "3-3", url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop", label: "PLC Touch Panel", type: "panel" },
+      { id: "3-4", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "C-Purlin Output", type: "output" },
+      { id: "3-5", url: "https://images.unsplash.com/photo-1537462715828-7f190ad5cd9f?w=800&h=600&fit=crop", label: "Side View", type: "side" },
+    ],
+    videos: [
+      { id: "v3-1", title: "CP-8000 Auto Changeover Demo", duration: "4:10", thumbnail: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+      { id: "v3-2", title: "Installation & Setup", duration: "12:00", thumbnail: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "installation" },
+    ],
+    accessories: [
+      "Hydraulic Decoiler (8 Ton)",
+      "Auto Size Changeover System",
+      "Hydraulic Post-Cut System",
+      "PLC Control with Servo",
+      "Straightener Unit",
+      "Spare Roller Set (C150)",
+      "Run-Out Table (6m)",
+    ],
+    warranty: "2 Years Comprehensive + 5 Years Roller",
     specs: [
       { label: "Production Capacity", value: "3-5 tons/hr" },
       { label: "Machine Speed", value: "30 m/min" },
@@ -213,6 +323,31 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
   "4": {
     ...MACHINES[3],
     color: "#64748B",
+    detailedDescription:
+      "The TR-6000 Trapezoidal Sheet Machine produces high-quality trapezoidal roofing and cladding sheets used in industrial buildings, warehouses, and commercial structures. Operating at 35 m/min with a servo-driven flying cut system, it delivers exceptional throughput while maintaining precise sheet lengths. The machine accepts coil widths from 1000-1250 mm and can handle pre-painted (color-coated) steel coils, producing ready-to-install roofing sheets. The auto stacker system allows for continuous operation without manual intervention.",
+    applications: [
+      "Industrial roofing",
+      "Warehouse cladding",
+      "Commercial building facades",
+      "Cold storage panels",
+      "Residential metal roofing",
+    ],
+    images: [
+      { id: "4-1", url: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&h=600&fit=crop", label: "TR-6000 Overview", type: "front" },
+      { id: "4-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Forming Rollers", type: "detail" },
+      { id: "4-3", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "Roofing Sheet Output", type: "output" },
+    ],
+    videos: [
+      { id: "v4-1", title: "TR-6000 High-Speed Demo", duration: "2:30", thumbnail: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+    ],
+    accessories: [
+      "Hydraulic Decoiler (6 Ton)",
+      "Servo Flying Cut System",
+      "Auto Stacker",
+      "Touch Screen HMI Panel",
+      "Coil Car (Optional)",
+    ],
+    warranty: "2 Years Comprehensive + 3 Years Roller",
     specs: [
       { label: "Production Capacity", value: "4-6 tons/hr" },
       { label: "Machine Speed", value: "35 m/min" },
@@ -230,6 +365,31 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
   "5": {
     ...MACHINES[4],
     color: "#F59E0B",
+    detailedDescription:
+      "The DF-4000 Door Frame Machine is a compact, energy-efficient roll forming system designed specifically for manufacturing steel door frames. It features an integrated punch and notch system that creates hinge holes, lock slots, and rubber channel grooves in a single pass, eliminating secondary operations. The machine's small footprint makes it perfect for workshops with limited space, while its 9 kW motor keeps electricity costs low. Suitable for both residential and commercial door frame production.",
+    applications: [
+      "Residential steel door frames",
+      "Commercial door frames",
+      "Window frames",
+      "Security door frames",
+      "Fire-rated door frames",
+    ],
+    images: [
+      { id: "5-1", url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop", label: "DF-4000 Machine", type: "front" },
+      { id: "5-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Punch Assembly", type: "detail" },
+      { id: "5-3", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "Door Frame Output", type: "output" },
+    ],
+    videos: [
+      { id: "v5-1", title: "DF-4000 Working Demo", duration: "3:00", thumbnail: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+    ],
+    accessories: [
+      "Manual Decoiler (3 Ton)",
+      "Punch & Notch Unit",
+      "Cutter Assembly",
+      "Spare Punch Dies",
+      "Safety Guard Set",
+    ],
+    warranty: "1 Year Comprehensive + 3 Years Roller",
     specs: [
       { label: "Production Capacity", value: "1-2 tons/hr" },
       { label: "Machine Speed", value: "15 m/min" },
@@ -247,6 +407,33 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
   "6": {
     ...MACHINES[5],
     color: "#0EA5E9",
+    detailedDescription:
+      "The SC-2000 Solar Channel Machine is designed for the rapidly growing solar energy sector. It produces strut channels and mounting rails used in solar panel installation systems — both rooftop and ground-mounted. The machine offers multi-profile capability, producing 41x41 mm and 41x21 mm channels from a single setup with quick changeover. PLC-controlled production ensures consistent slot patterns for module clamps. The corrosion-resistant hardened steel rollers provide extended service life even when processing galvanized and pre-galvanized steel coils.",
+    applications: [
+      "Rooftop solar panel mounting",
+      "Ground-mounted solar arrays",
+      "Solar carport structures",
+      "Cable tray systems",
+      "Electrical strut channels",
+    ],
+    images: [
+      { id: "6-1", url: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&h=600&fit=crop", label: "SC-2000 Machine", type: "front" },
+      { id: "6-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Channel Rollers", type: "detail" },
+      { id: "6-3", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "Solar Channel Output", type: "output" },
+      { id: "6-4", url: "https://images.unsplash.com/photo-1537462715828-7f190ad5cd9f?w=800&h=600&fit=crop", label: "PLC Panel", type: "panel" },
+    ],
+    videos: [
+      { id: "v6-1", title: "SC-2000 Production Line", duration: "4:30", thumbnail: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+      { id: "v6-2", title: "Solar Channel Applications", duration: "2:15", thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "output" },
+    ],
+    accessories: [
+      "Hydraulic Decoiler (5 Ton)",
+      "PLC Control System",
+      "Multi-Profile Die Set",
+      "Auto Slot Punching Unit",
+      "Corrosion-Resistant Rollers",
+    ],
+    warranty: "2 Years Comprehensive + 3 Years Roller",
     specs: [
       { label: "Production Capacity", value: "2-3 tons/hr" },
       { label: "Machine Speed", value: "22 m/min" },
@@ -264,6 +451,31 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
   "7": {
     ...MACHINES[6],
     color: "#EF4444",
+    detailedDescription:
+      "The ST-3500 Stud & Track Machine is a versatile light gauge steel framing system designed for the booming drywall and partition industry. It produces both studs (C-shaped) and tracks (U-shaped) from a single machine with quick profile changeover — typically under 15 minutes. Optimized for light gauge steel (0.45-1.2 mm), it delivers clean, accurate profiles suitable for direct use in drywall framing without any post-processing. The low-noise operation and compact design make it ideal for urban manufacturing facilities.",
+    applications: [
+      "Drywall partition framing",
+      "False ceiling support",
+      "Interior wall framing",
+      "Modular construction",
+      "Prefab building components",
+    ],
+    images: [
+      { id: "7-1", url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop", label: "ST-3500 Machine", type: "front" },
+      { id: "7-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Profile Detail", type: "detail" },
+      { id: "7-3", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "Stud & Track Output", type: "output" },
+    ],
+    videos: [
+      { id: "v7-1", title: "ST-3500 Dual Profile Demo", duration: "3:20", thumbnail: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+    ],
+    accessories: [
+      "Manual Decoiler (3 Ton)",
+      "Dual Profile Die Set",
+      "Auto Cutter",
+      "Changeover Tool Kit",
+      "Spare Roller Set",
+    ],
+    warranty: "1 Year Comprehensive + 3 Years Roller",
     specs: [
       { label: "Production Capacity", value: "1.5-2.5 tons/hr" },
       { label: "Machine Speed", value: "18 m/min" },
@@ -281,6 +493,34 @@ export const MACHINE_DETAILS: Record<string, MachineDetail> = {
   "8": {
     ...MACHINES[7],
     color: "#8B5CF6",
+    detailedDescription:
+      "The ZP-7000 Z-Purlin Machine is a heavy-duty roll forming system designed for manufacturing Z-shaped structural purlins. The key advantage of this machine is its adjustable profile width — operators can change the web depth from Z100 to Z250 without replacing rollers, using the PLC-controlled adjustment system. This flexibility makes it ideal for job-shop environments serving multiple customers with varying purlin specifications. The hydraulic cut system handles material up to 3.0 mm thickness with clean, precise cuts. Built-in memory storage saves up to 50 profile settings for instant recall.",
+    applications: [
+      "Pre-engineered buildings",
+      "Industrial shed roofing",
+      "Warehouse structures",
+      "Cold storage facilities",
+      "Mezzanine floor supports",
+    ],
+    images: [
+      { id: "8-1", url: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&h=600&fit=crop", label: "ZP-7000 Full Setup", type: "front" },
+      { id: "8-2", url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=800&h=600&fit=crop", label: "Adjustable Rollers", type: "detail" },
+      { id: "8-3", url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop", label: "Control Panel", type: "panel" },
+      { id: "8-4", url: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", label: "Z-Purlin Output", type: "output" },
+    ],
+    videos: [
+      { id: "v8-1", title: "ZP-7000 Size Adjustment Demo", duration: "5:00", thumbnail: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "demo" },
+      { id: "v8-2", title: "Maintenance Guide", duration: "7:30", thumbnail: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=400&h=225&fit=crop", youtubeId: "dQw4w9WgXcQ", type: "maintenance" },
+    ],
+    accessories: [
+      "Hydraulic Decoiler (8 Ton)",
+      "Adjustable Profile System",
+      "Hydraulic Cut Station",
+      "PLC with Memory (50 Profiles)",
+      "Run-Out Table (6m)",
+      "Spare Roller Set (Z150)",
+    ],
+    warranty: "2 Years Comprehensive + 5 Years Roller",
     specs: [
       { label: "Production Capacity", value: "3-4 tons/hr" },
       { label: "Machine Speed", value: "28 m/min" },
