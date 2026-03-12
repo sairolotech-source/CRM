@@ -167,6 +167,31 @@ Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll form
 - All forms show local success states after submission
 - GitHub repo: https://github.com/sairolotech-source/CRM
 
+### `artifacts/admin` (`@workspace/admin`)
+
+React + Vite admin panel for machine visualization management at `/admin/`.
+
+**Pages**:
+- Dashboard (`/admin/`) — Overview with total machines, 2D/3D asset counts, recently added machines
+- Machines (`/admin/machines`) — Registry table with search, create machine form, manage assets links
+- Machine Detail (`/admin/machines/:id`) — Machine info, drag-and-drop file upload for 2D (SVG, PNG) and 3D (GLB, GLTF, OBJ) assets, inline 2D preview, asset deletion
+- Settings (`/admin/settings`) — Global toggle switches for 5 visualization features (2D View, 3D View, Animation, Part Highlight, Technical Drawing Download)
+
+**Tech**: React, Vite, TailwindCSS, wouter, React Query, react-dropzone, lucide-react icons
+**Design**: Industrial premium — clean white background, blueprint-inspired accents, technical iconography
+
+**Database Tables** (lib/db/src/schema/):
+- `machines` — id, name, model, description, created_at, updated_at
+- `visualization_assets` — id, machine_id (FK), asset_type (2d/3d), file_name, file_size, mime_type, display_name, file_path, created_at
+- `visualization_settings` — id, enable_2d_view, enable_3d_view, enable_animation, enable_part_highlight, enable_technical_drawing_download, updated_at
+
+**API Routes** (artifacts/api-server/src/routes/):
+- `machines.ts` — CRUD for machines (GET/POST /machines, GET/PATCH/DELETE /machines/:id)
+- `visualization-assets.ts` — Asset management (GET /machines/:id/assets, POST /machines/:id/assets/upload, DELETE /machines/:id/assets/:assetId). Uses multer for file uploads to /uploads directory
+- `visualization-settings.ts` — Global settings (GET/PUT /visualization-settings). Auto-creates default settings row on first access
+
+**File Upload**: multer stores files in /uploads, served statically at /api/uploads. 2D max 10MB (SVG, PNG), 3D max 50MB (GLB, GLTF, OBJ)
+
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.

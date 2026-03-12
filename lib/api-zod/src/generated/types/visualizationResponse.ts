@@ -5,16 +5,17 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { VisualizationResponseFileType } from "./visualizationResponseFileType";
 
 export interface VisualizationResponse {
   id: number;
   machineId: number;
-  fileType: string;
-  fileUrl: string;
-  objectPath?: string | null;
+  fileType: VisualizationResponseFileType;
   fileName: string;
-  mimeType?: string | null;
+  fileSize: number;
+  mimeType: string;
   label?: string | null;
+  objectPath: string;
+  url: string;
   createdAt: Date;
-  updatedAt: Date;
 }

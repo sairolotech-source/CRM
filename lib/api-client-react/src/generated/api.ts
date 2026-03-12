@@ -22,14 +22,18 @@ import type {
   ErrorResponse,
   HealthStatus,
   ListMachinesParams,
-  MachineResponse,
+  Machine,
   MachineViewerDataResponse,
   RequestUploadUrlBody,
   RequestUploadUrlResponse,
   UpdateAdminSettingsBody,
   UpdateMachineBody,
+  UpdateVisualizationSettingsRequest,
+  UploadMachineAssetBody,
   UploadVisualizationBody,
+  VisualizationAsset,
   VisualizationResponse,
+  VisualizationSettings,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -118,7 +122,7 @@ export function useHealthCheck<
 }
 
 /**
- * Returns a list of all machines
+ * Returns a list of all machines with their visualization upload status
  * @summary List all machines
  */
 export const getListMachinesUrl = (params?: ListMachinesParams) => {
@@ -140,8 +144,8 @@ export const getListMachinesUrl = (params?: ListMachinesParams) => {
 export const listMachines = async (
   params?: ListMachinesParams,
   options?: RequestInit,
-): Promise<MachineResponse[]> => {
-  return customFetch<MachineResponse[]>(getListMachinesUrl(params), {
+): Promise<Machine[]> => {
+  return customFetch<Machine[]>(getListMachinesUrl(params), {
     ...options,
     method: "GET",
   });
@@ -223,8 +227,8 @@ export const getCreateMachineUrl = () => {
 export const createMachine = async (
   createMachineBody: CreateMachineBody,
   options?: RequestInit,
-): Promise<MachineResponse> => {
-  return customFetch<MachineResponse>(getCreateMachineUrl(), {
+): Promise<Machine> => {
+  return customFetch<Machine>(getCreateMachineUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -310,8 +314,8 @@ export const getGetMachineUrl = (id: number) => {
 export const getMachine = async (
   id: number,
   options?: RequestInit,
-): Promise<MachineResponse> => {
-  return customFetch<MachineResponse>(getGetMachineUrl(id), {
+): Promise<Machine> => {
+  return customFetch<Machine>(getGetMachineUrl(id), {
     ...options,
     method: "GET",
   });
@@ -399,8 +403,8 @@ export const updateMachine = async (
   id: number,
   updateMachineBody: UpdateMachineBody,
   options?: RequestInit,
-): Promise<MachineResponse> => {
-  return customFetch<MachineResponse>(getUpdateMachineUrl(id), {
+): Promise<Machine> => {
+  return customFetch<Machine>(getUpdateMachineUrl(id), {
     ...options,
     method: "PUT",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -473,6 +477,93 @@ export const useUpdateMachine = <
   TContext
 > => {
   return useMutation(getUpdateMachineMutationOptions(options));
+};
+
+/**
+ * @summary Partially update a machine
+ */
+export const getPatchMachineUrl = (id: number) => {
+  return `/api/machines/${id}`;
+};
+
+export const patchMachine = async (
+  id: number,
+  updateMachineBody: UpdateMachineBody,
+  options?: RequestInit,
+): Promise<Machine> => {
+  return customFetch<Machine>(getPatchMachineUrl(id), {
+    ...options,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateMachineBody),
+  });
+};
+
+export const getPatchMachineMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchMachine>>,
+    TError,
+    { id: number; data: BodyType<UpdateMachineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchMachine>>,
+  TError,
+  { id: number; data: BodyType<UpdateMachineBody> },
+  TContext
+> => {
+  const mutationKey = ["patchMachine"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchMachine>>,
+    { id: number; data: BodyType<UpdateMachineBody> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return patchMachine(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PatchMachineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchMachine>>
+>;
+export type PatchMachineMutationBody = BodyType<UpdateMachineBody>;
+export type PatchMachineMutationError = ErrorType<void>;
+
+/**
+ * @summary Partially update a machine
+ */
+export const usePatchMachine = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchMachine>>,
+    TError,
+    { id: number; data: BodyType<UpdateMachineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof patchMachine>>,
+  TError,
+  { id: number; data: BodyType<UpdateMachineBody> },
+  TContext
+> => {
+  return useMutation(getPatchMachineMutationOptions(options));
 };
 
 /**
@@ -1112,6 +1203,442 @@ export function useGetMachineViewerData<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary List visualization assets for a machine
+ */
+export const getListMachineAssetsUrl = (machineId: number) => {
+  return `/api/machines/${machineId}/assets`;
+};
+
+export const listMachineAssets = async (
+  machineId: number,
+  options?: RequestInit,
+): Promise<VisualizationAsset[]> => {
+  return customFetch<VisualizationAsset[]>(getListMachineAssetsUrl(machineId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListMachineAssetsQueryKey = (machineId: number) => {
+  return [`/api/machines/${machineId}/assets`] as const;
+};
+
+export const getListMachineAssetsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listMachineAssets>>,
+  TError = ErrorType<unknown>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listMachineAssets>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListMachineAssetsQueryKey(machineId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listMachineAssets>>
+  > = ({ signal }) =>
+    listMachineAssets(machineId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!machineId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listMachineAssets>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListMachineAssetsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listMachineAssets>>
+>;
+export type ListMachineAssetsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List visualization assets for a machine
+ */
+
+export function useListMachineAssets<
+  TData = Awaited<ReturnType<typeof listMachineAssets>>,
+  TError = ErrorType<unknown>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listMachineAssets>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListMachineAssetsQueryOptions(machineId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Upload a visualization asset for a machine
+ */
+export const getUploadMachineAssetUrl = (machineId: number) => {
+  return `/api/machines/${machineId}/assets/upload`;
+};
+
+export const uploadMachineAsset = async (
+  machineId: number,
+  uploadMachineAssetBody: UploadMachineAssetBody,
+  options?: RequestInit,
+): Promise<VisualizationAsset> => {
+  const formData = new FormData();
+  formData.append(`file`, uploadMachineAssetBody.file);
+  formData.append(`assetType`, uploadMachineAssetBody.assetType);
+  if (uploadMachineAssetBody.displayName !== undefined) {
+    formData.append(`displayName`, uploadMachineAssetBody.displayName);
+  }
+
+  return customFetch<VisualizationAsset>(getUploadMachineAssetUrl(machineId), {
+    ...options,
+    method: "POST",
+    body: formData,
+  });
+};
+
+export const getUploadMachineAssetMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof uploadMachineAsset>>,
+    TError,
+    { machineId: number; data: BodyType<UploadMachineAssetBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof uploadMachineAsset>>,
+  TError,
+  { machineId: number; data: BodyType<UploadMachineAssetBody> },
+  TContext
+> => {
+  const mutationKey = ["uploadMachineAsset"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof uploadMachineAsset>>,
+    { machineId: number; data: BodyType<UploadMachineAssetBody> }
+  > = (props) => {
+    const { machineId, data } = props ?? {};
+
+    return uploadMachineAsset(machineId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UploadMachineAssetMutationResult = NonNullable<
+  Awaited<ReturnType<typeof uploadMachineAsset>>
+>;
+export type UploadMachineAssetMutationBody = BodyType<UploadMachineAssetBody>;
+export type UploadMachineAssetMutationError = ErrorType<void>;
+
+/**
+ * @summary Upload a visualization asset for a machine
+ */
+export const useUploadMachineAsset = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof uploadMachineAsset>>,
+    TError,
+    { machineId: number; data: BodyType<UploadMachineAssetBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof uploadMachineAsset>>,
+  TError,
+  { machineId: number; data: BodyType<UploadMachineAssetBody> },
+  TContext
+> => {
+  return useMutation(getUploadMachineAssetMutationOptions(options));
+};
+
+/**
+ * @summary Delete a visualization asset
+ */
+export const getDeleteMachineAssetUrl = (
+  machineId: number,
+  assetId: number,
+) => {
+  return `/api/machines/${machineId}/assets/${assetId}`;
+};
+
+export const deleteMachineAsset = async (
+  machineId: number,
+  assetId: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteMachineAssetUrl(machineId, assetId), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteMachineAssetMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteMachineAsset>>,
+    TError,
+    { machineId: number; assetId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteMachineAsset>>,
+  TError,
+  { machineId: number; assetId: number },
+  TContext
+> => {
+  const mutationKey = ["deleteMachineAsset"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteMachineAsset>>,
+    { machineId: number; assetId: number }
+  > = (props) => {
+    const { machineId, assetId } = props ?? {};
+
+    return deleteMachineAsset(machineId, assetId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteMachineAssetMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteMachineAsset>>
+>;
+
+export type DeleteMachineAssetMutationError = ErrorType<void>;
+
+/**
+ * @summary Delete a visualization asset
+ */
+export const useDeleteMachineAsset = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteMachineAsset>>,
+    TError,
+    { machineId: number; assetId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteMachineAsset>>,
+  TError,
+  { machineId: number; assetId: number },
+  TContext
+> => {
+  return useMutation(getDeleteMachineAssetMutationOptions(options));
+};
+
+/**
+ * @summary Get global visualization settings
+ */
+export const getGetVisualizationSettingsUrl = () => {
+  return `/api/visualization-settings`;
+};
+
+export const getVisualizationSettings = async (
+  options?: RequestInit,
+): Promise<VisualizationSettings> => {
+  return customFetch<VisualizationSettings>(getGetVisualizationSettingsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetVisualizationSettingsQueryKey = () => {
+  return [`/api/visualization-settings`] as const;
+};
+
+export const getGetVisualizationSettingsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVisualizationSettings>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getVisualizationSettings>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetVisualizationSettingsQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getVisualizationSettings>>
+  > = ({ signal }) => getVisualizationSettings({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getVisualizationSettings>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetVisualizationSettingsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVisualizationSettings>>
+>;
+export type GetVisualizationSettingsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get global visualization settings
+ */
+
+export function useGetVisualizationSettings<
+  TData = Awaited<ReturnType<typeof getVisualizationSettings>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getVisualizationSettings>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetVisualizationSettingsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Update global visualization settings
+ */
+export const getUpdateVisualizationSettingsUrl = () => {
+  return `/api/visualization-settings`;
+};
+
+export const updateVisualizationSettings = async (
+  updateVisualizationSettingsRequest: UpdateVisualizationSettingsRequest,
+  options?: RequestInit,
+): Promise<VisualizationSettings> => {
+  return customFetch<VisualizationSettings>(
+    getUpdateVisualizationSettingsUrl(),
+    {
+      ...options,
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateVisualizationSettingsRequest),
+    },
+  );
+};
+
+export const getUpdateVisualizationSettingsMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVisualizationSettings>>,
+    TError,
+    { data: BodyType<UpdateVisualizationSettingsRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateVisualizationSettings>>,
+  TError,
+  { data: BodyType<UpdateVisualizationSettingsRequest> },
+  TContext
+> => {
+  const mutationKey = ["updateVisualizationSettings"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateVisualizationSettings>>,
+    { data: BodyType<UpdateVisualizationSettingsRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return updateVisualizationSettings(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateVisualizationSettingsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateVisualizationSettings>>
+>;
+export type UpdateVisualizationSettingsMutationBody =
+  BodyType<UpdateVisualizationSettingsRequest>;
+export type UpdateVisualizationSettingsMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update global visualization settings
+ */
+export const useUpdateVisualizationSettings = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateVisualizationSettings>>,
+    TError,
+    { data: BodyType<UpdateVisualizationSettingsRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateVisualizationSettings>>,
+  TError,
+  { data: BodyType<UpdateVisualizationSettingsRequest> },
+  TContext
+> => {
+  return useMutation(getUpdateVisualizationSettingsMutationOptions(options));
+};
 
 /**
  * Returns a presigned URL for uploading a file to object storage

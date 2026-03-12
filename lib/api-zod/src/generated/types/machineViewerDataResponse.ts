@@ -6,11 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { AdminSettingsResponse } from "./adminSettingsResponse";
-import type { MachineResponse } from "./machineResponse";
+import type { Machine } from "./machine";
 import type { VisualizationResponse } from "./visualizationResponse";
 
 export interface MachineViewerDataResponse {
-  machine: MachineResponse;
+  machine: Machine;
   visualizations: VisualizationResponse[];
   settings: AdminSettingsResponse;
 }

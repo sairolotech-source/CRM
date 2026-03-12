@@ -9,7 +9,7 @@ import type { ImageItem } from "./imageItem";
 import type { SpecItem } from "./specItem";
 import type { VideoItem } from "./videoItem";
 
-export interface MachineResponse {
+export interface Machine {
   id: number;
   name: string;
   model: string;
@@ -32,6 +32,9 @@ export interface MachineResponse {
   accessories?: string[] | null;
   images?: ImageItem[] | null;
   videos?: VideoItem[] | null;
+  has2d: boolean;
+  has3d: boolean;
+  assetCount: number;
   createdAt: Date;
   updatedAt: Date;
 }

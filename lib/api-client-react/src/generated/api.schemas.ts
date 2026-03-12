@@ -82,7 +82,7 @@ export interface UpdateMachineBody {
   videos?: VideoItem[];
 }
 
-export interface MachineResponse {
+export interface Machine {
   id: number;
   name: string;
   model: string;
@@ -105,21 +105,32 @@ export interface MachineResponse {
   accessories?: string[] | null;
   images?: ImageItem[] | null;
   videos?: VideoItem[] | null;
+  has2d: boolean;
+  has3d: boolean;
+  assetCount: number;
   createdAt: string;
   updatedAt: string;
 }
 
+export type VisualizationResponseFileType =
+  (typeof VisualizationResponseFileType)[keyof typeof VisualizationResponseFileType];
+
+export const VisualizationResponseFileType = {
+  "2d": "2d",
+  "3d": "3d",
+} as const;
+
 export interface VisualizationResponse {
   id: number;
   machineId: number;
-  fileType: string;
-  fileUrl: string;
-  objectPath?: string | null;
+  fileType: VisualizationResponseFileType;
   fileName: string;
-  mimeType?: string | null;
+  fileSize: number;
+  mimeType: string;
   label?: string | null;
+  objectPath: string;
+  url: string;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface AdminSettingsResponse {
@@ -130,8 +141,6 @@ export interface AdminSettingsResponse {
   enableAnimation: boolean;
   enablePartHighlight: boolean;
   enableDrawingDownload: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface UpdateAdminSettingsBody {
@@ -142,8 +151,46 @@ export interface UpdateAdminSettingsBody {
   enableDrawingDownload?: boolean;
 }
 
+export type VisualizationAssetAssetType =
+  (typeof VisualizationAssetAssetType)[keyof typeof VisualizationAssetAssetType];
+
+export const VisualizationAssetAssetType = {
+  "2d": "2d",
+  "3d": "3d",
+} as const;
+
+export interface VisualizationAsset {
+  id: number;
+  machineId: number;
+  assetType: VisualizationAssetAssetType;
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+  displayName?: string;
+  filePath: string;
+  createdAt: string;
+}
+
+export interface VisualizationSettings {
+  id: number;
+  enable2dView: boolean;
+  enable3dView: boolean;
+  enableAnimation: boolean;
+  enablePartHighlight: boolean;
+  enableTechnicalDrawingDownload: boolean;
+  updatedAt: string;
+}
+
+export interface UpdateVisualizationSettingsRequest {
+  enable2dView?: boolean;
+  enable3dView?: boolean;
+  enableAnimation?: boolean;
+  enablePartHighlight?: boolean;
+  enableTechnicalDrawingDownload?: boolean;
+}
+
 export interface MachineViewerDataResponse {
-  machine: MachineResponse;
+  machine: Machine;
   visualizations: VisualizationResponse[];
   settings: AdminSettingsResponse;
 }
@@ -178,4 +225,18 @@ export type UploadVisualizationBody = {
   file: Blob;
   fileType: UploadVisualizationBodyFileType;
   label?: string;
+};
+
+export type UploadMachineAssetBodyAssetType =
+  (typeof UploadMachineAssetBodyAssetType)[keyof typeof UploadMachineAssetBodyAssetType];
+
+export const UploadMachineAssetBodyAssetType = {
+  "2d": "2d",
+  "3d": "3d",
+} as const;
+
+export type UploadMachineAssetBody = {
+  file: Blob;
+  assetType: UploadMachineAssetBodyAssetType;
+  displayName?: string;
 };

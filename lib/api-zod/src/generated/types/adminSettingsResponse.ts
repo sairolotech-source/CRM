@@ -14,6 +14,4 @@ export interface AdminSettingsResponse {
   enableAnimation: boolean;
   enablePartHighlight: boolean;
   enableDrawingDownload: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }

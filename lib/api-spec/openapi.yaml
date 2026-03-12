@@ -18,6 +18,10 @@ tags:
     description: Admin settings for visualization features
   - name: storage
     description: Object storage operations
+  - name: visualization-assets
+    description: Machine visualization asset management (admin panel)
+  - name: visualization-settings
+    description: Global visualization settings
 paths:
   /healthz:
     get:
@@ -38,7 +42,7 @@ paths:
       operationId: listMachines
       tags: [machines]
       summary: List all machines
-      description: Returns a list of all machines
+      description: Returns a list of all machines with their visualization upload status
       parameters:
         - name: category
           in: query
@@ -53,7 +57,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/MachineResponse"
+                  $ref: "#/components/schemas/Machine"
+
     post:
       operationId: createMachine
       tags: [machines]
@@ -71,7 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MachineResponse"
+                $ref: "#/components/schemas/Machine"
 
   /machines/{id}:
     get:
@@ -91,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MachineResponse"
+                $ref: "#/components/schemas/Machine"
         "404":
           description: Machine not found
           content:
@@ -121,13 +126,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MachineResponse"
+                $ref: "#/components/schemas/Machine"
         "404":
           description: Machine not found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+    patch:
+      operationId: patchMachine
+      tags: [machines]
+      summary: Partially update a machine
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMachineBody"
+      responses:
+        "200":
+          description: Machine updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Machine"
+        "404":
+          description: Machine not found
+
     delete:
       operationId: deleteMachine
       tags: [machines]
@@ -309,6 +341,121 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  /machines/{machineId}/assets:
+    get:
+      operationId: listMachineAssets
+      tags: [visualization-assets]
+      summary: List visualization assets for a machine
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VisualizationAsset"
+
+  /machines/{machineId}/assets/upload:
+    post:
+      operationId: uploadMachineAsset
+      tags: [visualization-assets]
+      summary: Upload a visualization asset for a machine
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                assetType:
+                  type: string
+                  enum: ["2d", "3d"]
+                displayName:
+                  type: string
+              required:
+                - file
+                - assetType
+      responses:
+        "201":
+          description: Asset uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisualizationAsset"
+        "400":
+          description: Invalid file type or size
+        "404":
+          description: Machine not found
+
+  /machines/{machineId}/assets/{assetId}:
+    delete:
+      operationId: deleteMachineAsset
+      tags: [visualization-assets]
+      summary: Delete a visualization asset
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Asset deleted
+        "404":
+          description: Asset not found
+
+  /visualization-settings:
+    get:
+      operationId: getVisualizationSettings
+      tags: [visualization-settings]
+      summary: Get global visualization settings
+      responses:
+        "200":
+          description: Current settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisualizationSettings"
+
+    put:
+      operationId: updateVisualizationSettings
+      tags: [visualization-settings]
+      summary: Update global visualization settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateVisualizationSettingsRequest"
+      responses:
+        "200":
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisualizationSettings"
 
   /storage/uploads/request-url:
     post:
@@ -577,7 +724,7 @@ components:
           items:
             $ref: "#/components/schemas/VideoItem"
 
-    MachineResponse:
+    Machine:
       type: object
       properties:
         id:
@@ -656,6 +803,12 @@ components:
           items:
             $ref: "#/components/schemas/VideoItem"
           nullable: true
+        has2d:
+          type: boolean
+        has3d:
+          type: boolean
+        assetCount:
+          type: integer
         createdAt:
           type: string
           format: date-time
@@ -667,6 +820,9 @@ components:
         - name
         - model
         - category
+        - has2d
+        - has3d
+        - assetCount
         - createdAt
         - updatedAt
 
@@ -679,33 +835,33 @@ components:
           type: integer
         fileType:
           type: string
-        fileUrl:
-          type: string
-        objectPath:
-          type: string
-          nullable: true
+          enum: [2d, 3d]
         fileName:
           type: string
+        fileSize:
+          type: integer
         mimeType:
           type: string
-          nullable: true
         label:
           type: string
           nullable: true
-        createdAt:
+        objectPath:
           type: string
-          format: date-time
-        updatedAt:
+        url:
+          type: string
+        createdAt:
           type: string
           format: date-time
       required:
         - id
         - machineId
         - fileType
-        - fileUrl
         - fileName
+        - fileSize
+        - mimeType
+        - objectPath
+        - url
         - createdAt
-        - updatedAt
 
     AdminSettingsResponse:
       type: object
@@ -724,12 +880,6 @@ components:
           type: boolean
         enableDrawingDownload:
           type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
       required:
         - id
         - machineId
@@ -738,8 +888,6 @@ components:
         - enableAnimation
         - enablePartHighlight
         - enableDrawingDownload
-        - createdAt
-        - updatedAt
 
     UpdateAdminSettingsBody:
       type: object
@@ -755,11 +903,85 @@ components:
         enableDrawingDownload:
           type: boolean
 
+    VisualizationAsset:
+      type: object
+      properties:
+        id:
+          type: integer
+        machineId:
+          type: integer
+        assetType:
+          type: string
+          enum: ["2d", "3d"]
+        fileName:
+          type: string
+        fileSize:
+          type: integer
+        mimeType:
+          type: string
+        displayName:
+          type: string
+        filePath:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - machineId
+        - assetType
+        - fileName
+        - fileSize
+        - mimeType
+        - filePath
+        - createdAt
+
+    VisualizationSettings:
+      type: object
+      properties:
+        id:
+          type: integer
+        enable2dView:
+          type: boolean
+        enable3dView:
+          type: boolean
+        enableAnimation:
+          type: boolean
+        enablePartHighlight:
+          type: boolean
+        enableTechnicalDrawingDownload:
+          type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - enable2dView
+        - enable3dView
+        - enableAnimation
+        - enablePartHighlight
+        - enableTechnicalDrawingDownload
+        - updatedAt
+
+    UpdateVisualizationSettingsRequest:
+      type: object
+      properties:
+        enable2dView:
+          type: boolean
+        enable3dView:
+          type: boolean
+        enableAnimation:
+          type: boolean
+        enablePartHighlight:
+          type: boolean
+        enableTechnicalDrawingDownload:
+          type: boolean
+
     MachineViewerDataResponse:
       type: object
       properties:
         machine:
-          $ref: "#/components/schemas/MachineResponse"
+          $ref: "#/components/schemas/Machine"
         visualizations:
           type: array
           items:

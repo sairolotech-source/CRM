@@ -1,0 +1,18 @@
+packages:
+  "react-dropzone": "Drag and drop file uploads for 2D and 3D assets"
+  "framer-motion": "Page transitions and micro-interactions"
+  "date-fns": "Human-readable date formatting for assets and machines"
+  "react-hook-form": "Form state management"
+  "@hookform/resolvers": "Zod validation resolver for forms"
+  "zod": "Schema validation for forms"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility for merging tailwind classes without style conflicts"
+
+images:
+  - path: "artifacts/admin/public/images/blueprint-bg.png"
+    description: "Subtle industrial technical blueprint background pattern with grid lines and faded geometric shapes in light blue on a white background, high contrast, clean"
+    aspect_ratio: "16:9"
+
+notes:
+  - File uploads use native fetch to bypass generated hook limitations for multipart/form-data.
+  - API base URL requires navigating up one level from the frontend base path in dev.
