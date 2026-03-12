@@ -1,0 +1,190 @@
+Aap jo system banana chahte ho usko **Replit ko clear specification** me batana zaroori hai. Neeche ek **Advanced Prompt / Blueprint** diya hai jo aap **Replit** me paste kar sakte ho taaki **Ads + Community + Anti-Spam Engine** sahi tarike se ban sake.
+
+---
+
+# SUPER PROMPT – ADS + COMMUNITY ENGINE (SAI ROLOTECH)
+
+Create an advanced monetization and community system for the SAI ROLOTECH application.
+
+The platform must generate revenue using supplier ads, sponsored posts and Google ads while keeping the community safe from spam and fraud.
+
+---
+
+## HOME SCREEN SUPPLIER BANNER ADS
+
+Create a rotating banner system on the home screen.
+
+Features:
+
+• Only paid suppliers can appear in the banner
+• Banner rotates automatically every few seconds
+• Each banner shows:
+
+Supplier logo
+Product image
+Supplier name
+“PREMIUM SUPPLIER” tag
+View product button
+
+Admin controls:
+
+• Approve banner ads
+• Set banner duration
+• Enable / disable banners
+• Control pricing
+
+---
+
+## COMMUNITY PAGE SYSTEM
+
+Create a community page where users can interact.
+
+Users can:
+
+• Post machine problems
+• Post product photos
+• Post supplier promotions
+• Ask questions
+• Comment on posts
+• Like posts
+• Share posts
+
+Post features:
+
+• Users can upload product photos
+• Users can add machine details
+• Tag supplier or machine type
+
+---
+
+## COMMUNITY MONETIZATION
+
+Community page must also support ads.
+
+Ad placements:
+
+• Ads between posts
+• Sponsored posts by suppliers
+• Google Ads between posts
+
+Sponsored post features:
+
+• Supplier can promote product
+• "Sponsored" label must appear
+• Admin approval required
+
+---
+
+## LIKE SHARE CHAT SYSTEM
+
+Each post must have:
+
+• Like button
+• Share button
+• Comment system
+• Chat with supplier button
+
+Chat system:
+
+User can directly message supplier from post.
+
+---
+
+## ANTI SPAM & FRAUD ENGINE
+
+Create a powerful anti spam system.
+
+Rules:
+
+• Maximum 3 posts per day per user
+• Maximum 3 comments per minute
+
+If rule violated:
+
+1st warning
+2nd warning
+3rd violation = account temporarily frozen
+
+Account freeze duration:
+
+24 hours lock.
+
+---
+
+## FRAUD DETECTION
+
+System should detect:
+
+• repeated spam posts
+• fake supplier promotions
+• duplicate messages
+• suspicious links
+
+Actions:
+
+Hide post automatically
+Notify admin
+Freeze account if needed.
+
+---
+
+## ADMIN CONTROL PANEL
+
+Admin must control:
+
+• Ads system
+• Sponsored posts
+• Community moderation
+• Freeze / unfreeze accounts
+• Anti spam rules
+• Revenue tracking
+
+---
+
+## UI REQUIREMENTS
+
+Modern social media style interface.
+
+Feed style post layout similar to:
+
+LinkedIn or Facebook.
+
+Fast loading
+Mobile friendly
+Clean interface.
+
+---
+
+## GOAL
+
+This system must generate revenue from ads while keeping the community safe from spam and fraud.
+
+---
+
+## Aapke Idea ko aur powerful banane ke liye 5 extra features
+
+1️⃣ **Verified Supplier Badge**
+Paid supplier ko **Verified + Premium badge** mile.
+
+2️⃣ **Boost Post System**
+Supplier apni post ko **top par push** kar sake.
+
+3️⃣ **Report Button**
+User fraud post report kar sake.
+
+4️⃣ **Trust Score System**
+Supplier rating system (5 star).
+
+5️⃣ **Auto Spam AI**
+Repeated keywords detect kare.
+
+---
+
+💡 Agar aap chaho to main **SAI ROLOTECH ke liye ek “Revenue Engine Blueprint”** bhi bana sakta hoon jisme:
+
+* 10 tarike app se paise kamane ke
+* Ads strategy
+* Supplier subscription plan
+* AI tools monetization
+
+Ye system aapki app ko **self-earning marketplace** bana sakta hai. 🚀

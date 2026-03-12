@@ -15,6 +15,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,12 +28,17 @@ const BASE_OPTS = { headerShown: false };
 const RootLayoutNav = React.memo(function RootLayoutNav() {
   return (
     <Stack screenOptions={BASE_OPTS}>
+      <Stack.Screen name="auth" options={BASE_OPTS} />
       <Stack.Screen name="(tabs)" options={BASE_OPTS} />
       <Stack.Screen name="catalog/[id]" options={CARD_OPTS} />
       <Stack.Screen name="service-request" options={MODAL_OPTS} />
       <Stack.Screen name="quotation" options={MODAL_OPTS} />
       <Stack.Screen name="amc" options={MODAL_OPTS} />
       <Stack.Screen name="support-ticket" options={MODAL_OPTS} />
+      <Stack.Screen name="jobs" options={CARD_OPTS} />
+      <Stack.Screen name="hiring" options={CARD_OPTS} />
+      <Stack.Screen name="supplier-dashboard" options={CARD_OPTS} />
+      <Stack.Screen name="vendor-dashboard" options={CARD_OPTS} />
     </Stack>
   );
 });
@@ -66,14 +72,16 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <GestureHandlerRootView style={gestureStyle}>
-            <KeyboardProvider>
-              <StatusBar style="auto" />
-              <RootLayoutNav />
-            </KeyboardProvider>
-          </GestureHandlerRootView>
-        </QueryClientProvider>
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <GestureHandlerRootView style={gestureStyle}>
+              <KeyboardProvider>
+                <StatusBar style="auto" />
+                <RootLayoutNav />
+              </KeyboardProvider>
+            </GestureHandlerRootView>
+          </QueryClientProvider>
+        </AuthProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   );

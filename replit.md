@@ -99,6 +99,21 @@ Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll form
 
 **Color Theme**: Industrial Blue (`#1A56DB`) + Navy background (`#0F172A`) + Electric Blue accent (`#0EA5E9`), Inter font
 
+**Auth System** (3 login methods):
+- `contexts/AuthContext.tsx` — Auth state, 5 roles (machine_user, supplier, vendor, job_seeker, employer), demo login
+- `auth/login.tsx` — Premium login with SR branding, role selector, Email+Password, PIN entry, Biometric/Face ID buttons, trust badges (Secure/Trusted/Verified)
+- `auth/register.tsx` — Registration with role selection chips, personal info, company name, password fields
+- `auth/forgot-password.tsx` — 4-step OTP recovery: Phone → OTP (6-digit) → New Password → Success, with progress dots
+
+**Role-Based Dashboards**:
+- `supplier-dashboard.tsx` — Green gradient header, Active Orders/Revenue/Clients stats, order cards with Pending/Shipped/Delivered status
+- `vendor-dashboard.tsx` — Amber gradient header, Products/Low Stock/Orders stats, inventory cards with demand badges (High/Medium/Low)
+- `jobs.tsx` — Job Board for seekers: dark header, search, filter (Distance/Salary/Experience), job cards with Urgent badges, location distance, skills tags, Apply Now
+- `hiring.tsx` — Red gradient Hiring Dashboard: applicant stats, status filters (New/Shortlisted/Interview/Rejected), applicant cards with avatar, skills, Shortlist/Reject/Call actions
+
+**Data**:
+- `data/jobs.ts` — 6 industrial jobs + 5 job applicants with skills, salary, location, distance, experience data
+
 **Screens**:
 - `(tabs)/index.tsx` — Home dashboard with quick actions, stats, feature list, WhatsApp CTA
 - `(tabs)/catalog.tsx` — Machine catalog with search, category filter, 8 machines
