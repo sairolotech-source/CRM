@@ -111,10 +111,22 @@ Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll form
 - `amc.tsx` — AMC plan enrollment (modal) with 3-tier plan selection
 - `support-ticket.tsx` — Support ticket form (modal) with categories
 
+**Performance Engine**:
+- `hooks/useTheme.ts` — Centralized memoized theme hook (colors, insets, platform detection) — single source of truth, prevents redundant re-renders
+- `data/machines.ts` — Centralized machine data store with typed exports (`MACHINES`, `MACHINE_DETAILS`, `CATEGORIES`, `CATEGORY_COLORS`, `MACHINE_TYPES`) — eliminates duplication across screens
+- All list items wrapped in `React.memo` (MachineCard, ActionCard, FeatureCard, StatCard, ServiceCard, AmcCard, CategoryChip, SpecRow, etc.)
+- `useMemo` for filtered/computed data (catalog search, calculator results, plan lookups)
+- `useCallback` for all event handlers to prevent unnecessary child re-renders
+- FlatList tuning: `removeClippedSubviews`, `maxToRenderPerBatch=4`, `windowSize=5`, `initialNumToRender=3`, `updateCellsBatchingPeriod=50`
+- QueryClient configured with `staleTime: 5min`, `gcTime: 30min` for efficient caching
+- Static data arrays marked `as const` for type narrowing and immutability
+- Stack screen options extracted to module-level constants to prevent re-creation
+
 **Key Notes**:
 - Uses `isLiquidGlassAvailable()` for iOS 26+ NativeTabs, falls back to classic Tabs with BlurView
 - All data is local/static (no backend integration)
 - All forms show local success states after submission
+- GitHub repo: https://github.com/sairolotech-source/CRM
 
 ### `scripts` (`@workspace/scripts`)
 

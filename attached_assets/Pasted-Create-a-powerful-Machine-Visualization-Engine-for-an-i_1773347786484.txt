@@ -1,0 +1,186 @@
+Create a powerful Machine Visualization Engine for an industrial application called **SAI ROLOTECH Roll Forming Machine Catalog System**.
+
+The system must allow users to view machines in **2D and 3D format**, but the visibility must be controlled by the admin.
+
+The goal is to help customers understand machines visually while keeping full control with the administrator.
+
+---
+
+MAIN FEATURE 1
+2D MACHINE VIEW
+
+The system must show clear 2D technical drawings of the machine.
+
+2D view should include:
+
+Machine Frame Layout
+Roll Stations Layout
+Entry Guide
+Cutting System
+Motor Position
+Gearbox Position
+
+Users should be able to:
+
+Zoom
+Pan
+See part labels
+
+Example Labels:
+
+Entry Gate
+Main Base
+Roll Shaft
+Gear Drive
+Cutting System
+
+2D view should be lightweight and load quickly.
+
+---
+
+MAIN FEATURE 2
+3D MACHINE VIEW
+
+Provide an interactive 3D model of the roll forming machine.
+
+Users should be able to:
+
+Rotate machine
+Zoom machine
+View machine from different angles
+Highlight machine parts
+
+Optional 3D features:
+
+Show roll stations animation
+Show sheet forming animation
+Exploded view of machine parts
+
+3D models should be optimized for web performance.
+
+---
+
+MAIN FEATURE 3
+ADMIN CONTROL PANEL
+
+Admin must have full control to enable or disable visualization features.
+
+Admin Settings:
+
+Enable 2D Machine View (ON / OFF)
+
+Enable 3D Machine View (ON / OFF)
+
+Enable Machine Animation (ON / OFF)
+
+Enable Part Highlight (ON / OFF)
+
+Enable Technical Drawing Download (ON / OFF)
+
+If admin disables a feature, it should immediately disappear from the user interface.
+
+---
+
+MAIN FEATURE 4
+MACHINE MODEL MANAGER
+
+Admin can upload visualization for each machine model.
+
+Machine Model Examples:
+
+SAI-4.5
+SAI-5.0
+SAI-6.0
+
+Admin can upload:
+
+2D drawing files
+3D model files
+
+Supported formats:
+
+2D
+
+SVG
+PNG
+CAD export
+
+3D
+
+GLB
+GLTF
+OBJ
+
+---
+
+MAIN FEATURE 5
+SMART MACHINE VIEWER
+
+When a user opens a machine page, the system should show:
+
+Machine name
+Machine specifications
+Machine images
+2D technical drawing (if enabled)
+3D viewer (if enabled)
+
+Tabs example:
+
+Overview
+Specifications
+2D View
+3D View
+Videos
+Quotation
+
+---
+
+MAIN FEATURE 6
+PERFORMANCE OPTIMIZATION
+
+Use lazy loading for 3D models.
+
+If the device is slow:
+
+Automatically switch to 2D mode.
+
+---
+
+TECHNOLOGY STACK
+
+Frontend
+
+React / NextJS
+
+3D Rendering
+
+Three.js
+React Three Fiber
+
+2D Viewer
+
+SVG renderer or Canvas
+
+Backend
+
+NodeJS
+
+Database
+
+Firebase or Supabase
+
+---
+
+UI DESIGN
+
+Industrial premium UI.
+
+Clean white background
+Technical style icons
+Blueprint style design for 2D drawings
+
+---
+
+FINAL GOAL
+
+Create the most advanced machine catalog system for **Roll Forming Machines** where users can visually understand machines through 2D drawings and interactive 3D models, while the admin maintains full control of what features are visible.

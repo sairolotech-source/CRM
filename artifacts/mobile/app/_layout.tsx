@@ -8,7 +8,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -18,50 +18,24 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
+const gestureStyle = { flex: 1 } as const;
 
-function RootLayoutNav() {
+const MODAL_OPTS = { headerShown: false, presentation: "modal" as const };
+const CARD_OPTS = { headerShown: false, presentation: "card" as const };
+const BASE_OPTS = { headerShown: false };
+
+const RootLayoutNav = React.memo(function RootLayoutNav() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="catalog/[id]"
-        options={{
-          headerShown: false,
-          presentation: "card",
-        }}
-      />
-      <Stack.Screen
-        name="service-request"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="quotation"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="amc"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="support-ticket"
-        options={{
-          headerShown: false,
-          presentation: "modal",
-        }}
-      />
+    <Stack screenOptions={BASE_OPTS}>
+      <Stack.Screen name="(tabs)" options={BASE_OPTS} />
+      <Stack.Screen name="catalog/[id]" options={CARD_OPTS} />
+      <Stack.Screen name="service-request" options={MODAL_OPTS} />
+      <Stack.Screen name="quotation" options={MODAL_OPTS} />
+      <Stack.Screen name="amc" options={MODAL_OPTS} />
+      <Stack.Screen name="support-ticket" options={MODAL_OPTS} />
     </Stack>
   );
-}
+});
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -70,6 +44,16 @@ export default function RootLayout() {
     Inter_600SemiBold,
     Inter_700Bold,
   });
+
+  const queryClient = useMemo(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: { staleTime: 1000 * 60 * 5, gcTime: 1000 * 60 * 30 },
+        },
+      }),
+    []
+  );
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
@@ -83,7 +67,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
+          <GestureHandlerRootView style={gestureStyle}>
             <KeyboardProvider>
               <StatusBar style="auto" />
               <RootLayoutNav />
