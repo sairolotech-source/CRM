@@ -8,11 +8,15 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useTheme } from "@/hooks/useTheme";
 import { MACHINE_TYPES } from "@/data/machines";
+import AnimatedPressable from "@/components/AnimatedPressable";
+import { CARD_SHADOW, BUTTON_SHADOW } from "@/constants/shadows";
 
 const ISSUE_TYPES = [
   "Routine Maintenance",
@@ -165,10 +169,12 @@ export default function ServiceRequestScreen() {
           <TextInput style={[styles.textArea, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border, color: colors.text, fontFamily: "Inter_400Regular" }]} value={description} onChangeText={setDescription} placeholder="Describe the issue in detail..." placeholderTextColor={colors.textMuted} multiline numberOfLines={4} textAlignVertical="top" />
         </View>
 
-        <TouchableOpacity style={[styles.submitBtn, { backgroundColor: "#10B981" }]} onPress={handleSubmit} activeOpacity={0.85}>
-          <Feather name="send" size={18} color="#fff" />
-          <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Submit Request</Text>
-        </TouchableOpacity>
+        <AnimatedPressable onPress={handleSubmit} scaleDown={0.98}>
+          <LinearGradient colors={["#059669", "#10B981"]} style={[styles.submitBtn, BUTTON_SHADOW]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+            <Feather name="send" size={18} color="#fff" />
+            <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Submit Request</Text>
+          </LinearGradient>
+        </AnimatedPressable>
       </ScrollView>
     </View>
   );

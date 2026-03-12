@@ -8,10 +8,14 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useTheme } from "@/hooks/useTheme";
+import AnimatedPressable from "@/components/AnimatedPressable";
+import { BUTTON_SHADOW } from "@/constants/shadows";
 
 const CATEGORIES = [
   { id: "technical", label: "Technical Issue", icon: "settings", color: "#1A56DB" },
@@ -126,10 +130,12 @@ export default function SupportTicketScreen() {
           <TextInput style={[styles.textArea, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border, color: colors.text, fontFamily: "Inter_400Regular" }]} value={description} onChangeText={setDescription} placeholder="Describe your issue in detail. Include machine model, error codes, and steps already taken..." placeholderTextColor={colors.textMuted} multiline numberOfLines={5} textAlignVertical="top" />
         </View>
 
-        <TouchableOpacity style={[styles.submitBtn, { backgroundColor: "#EF4444" }]} onPress={handleSubmit} activeOpacity={0.85}>
-          <Feather name="send" size={18} color="#fff" />
-          <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Submit Ticket</Text>
-        </TouchableOpacity>
+        <AnimatedPressable onPress={handleSubmit} scaleDown={0.98}>
+          <LinearGradient colors={["#DC2626", "#EF4444"]} style={[styles.submitBtn, BUTTON_SHADOW]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+            <Feather name="send" size={18} color="#fff" />
+            <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Submit Ticket</Text>
+          </LinearGradient>
+        </AnimatedPressable>
       </ScrollView>
     </View>
   );

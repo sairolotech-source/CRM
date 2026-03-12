@@ -8,10 +8,14 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useTheme } from "@/hooks/useTheme";
+import AnimatedPressable from "@/components/AnimatedPressable";
+import { BUTTON_SHADOW } from "@/constants/shadows";
 
 const AMC_PLANS = [
   {
@@ -178,10 +182,12 @@ export default function AmcScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={[styles.submitBtn, { backgroundColor: plan.color }]} onPress={handleSubmit} activeOpacity={0.85}>
-          <Feather name="shield" size={18} color="#fff" />
-          <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Enroll in {plan.name}</Text>
-        </TouchableOpacity>
+        <AnimatedPressable onPress={handleSubmit} scaleDown={0.98}>
+          <LinearGradient colors={plan.id === "basic" ? ["#475569", "#64748B"] : plan.id === "standard" ? ["#1E40AF", "#3B82F6"] : ["#7C3AED", "#A78BFA"]} style={[styles.submitBtn, BUTTON_SHADOW]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+            <Feather name="shield" size={18} color="#fff" />
+            <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Enroll in {plan.name}</Text>
+          </LinearGradient>
+        </AnimatedPressable>
       </ScrollView>
     </View>
   );

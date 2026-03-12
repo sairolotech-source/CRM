@@ -8,11 +8,15 @@ import {
   TextInput,
   Alert,
 } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useTheme } from "@/hooks/useTheme";
 import { MACHINE_TYPES } from "@/data/machines";
+import AnimatedPressable from "@/components/AnimatedPressable";
+import { BUTTON_SHADOW } from "@/constants/shadows";
 
 const MACHINE_OPTIONS = [...MACHINE_TYPES.filter((t) => t !== "Other"), "Custom / Not Listed"];
 
@@ -141,10 +145,12 @@ export default function QuotationScreen() {
           <TextInput style={[styles.textArea, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border, color: colors.text, fontFamily: "Inter_400Regular" }]} value={requirements} onChangeText={setRequirements} placeholder="Any specific requirements, configurations, or questions..." placeholderTextColor={colors.textMuted} multiline numberOfLines={4} textAlignVertical="top" />
         </View>
 
-        <TouchableOpacity style={[styles.submitBtn, { backgroundColor: "#F59E0B" }]} onPress={handleSubmit} activeOpacity={0.85}>
-          <Feather name="file-text" size={18} color="#fff" />
-          <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Request Quotation</Text>
-        </TouchableOpacity>
+        <AnimatedPressable onPress={handleSubmit} scaleDown={0.98}>
+          <LinearGradient colors={["#D97706", "#F59E0B"]} style={[styles.submitBtn, BUTTON_SHADOW]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+            <Feather name="file-text" size={18} color="#fff" />
+            <Text style={[styles.submitBtnText, { fontFamily: "Inter_600SemiBold" }]}>Request Quotation</Text>
+          </LinearGradient>
+        </AnimatedPressable>
       </ScrollView>
     </View>
   );

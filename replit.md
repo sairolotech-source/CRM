@@ -111,14 +111,23 @@ Expo React Native mobile app for **Sai Rolotech** — a B2B industrial roll form
 - `amc.tsx` — AMC plan enrollment (modal) with 3-tier plan selection
 - `support-ticket.tsx` — Support ticket form (modal) with categories
 
+**3D Design System** (Figma-quality):
+- `constants/shadows.ts` — `shadow3D()`, `shadowGlow()`, `shadowInset()` utilities + `CARD_SHADOW`, `CARD_SHADOW_LG`, `CARD_SHADOW_XL`, `BUTTON_SHADOW`, `ICON_SHADOW` presets
+- `expo-linear-gradient` — Gradient icons, buttons, headers, badges, CTA banners across all screens
+- Dark navy gradient headers (`#0F172A → #1E293B`) on Home and Profile screens
+- Color-coded gradient pairs per feature: Blue `["#1E40AF","#3B82F6"]`, Green `["#059669","#10B981"]`, Amber `["#D97706","#F59E0B"]`, Purple `["#7C3AED","#8B5CF6"]`, Red `["#DC2626","#EF4444"]`
+- `AnimatedPressable` with `scaleDown` prop for Instagram-style micro-interactions
+- `@shopify/flash-list` in catalog for virtualized performance
+- `HomeSkeleton` shimmer loading (80ms) prevents content flash
+- Pull-to-refresh on Home, Catalog, Services, Profile screens
+
 **Performance Engine**:
 - `hooks/useTheme.ts` — Centralized memoized theme hook (colors, insets, platform detection) — single source of truth, prevents redundant re-renders
 - `data/machines.ts` — Centralized machine data store with typed exports (`MACHINES`, `MACHINE_DETAILS`, `CATEGORIES`, `CATEGORY_COLORS`, `MACHINE_TYPES`) — eliminates duplication across screens
 - All list items wrapped in `React.memo` (MachineCard, ActionCard, FeatureCard, StatCard, ServiceCard, AmcCard, CategoryChip, SpecRow, etc.)
 - `useMemo` for filtered/computed data (catalog search, calculator results, plan lookups)
 - `useCallback` for all event handlers to prevent unnecessary child re-renders
-- FlatList tuning: `removeClippedSubviews`, `maxToRenderPerBatch=4`, `windowSize=5`, `initialNumToRender=3`, `updateCellsBatchingPeriod=50`
-- QueryClient configured with `staleTime: 5min`, `gcTime: 30min` for efficient caching
+- `useDebounce` hook for search input optimization
 - Static data arrays marked `as const` for type narrowing and immutability
 - Stack screen options extracted to module-level constants to prevent re-creation
 
