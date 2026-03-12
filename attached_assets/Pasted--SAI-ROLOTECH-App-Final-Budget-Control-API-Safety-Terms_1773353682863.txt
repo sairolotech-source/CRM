@@ -1,0 +1,281 @@
+नीचे **SAI ROLOTECH App** के लिए एक **Final Budget-Control + API Safety + Terms & Conditions + Permissions Blueprint** दिया गया है। यह structure इस तरह बनाया गया है कि **over-spending न हो, vendors अपनी API risk पर use कर सकें, और iOS/Android policies के साथ compatible रहे।**
+*(ध्यान: यह practical template है, लेकिन production से पहले किसी legal professional से review कराना अच्छा रहता है.)*
+
+---
+
+# 🚀 SAI ROLOTECH – Budget Control & API Safety System
+
+## 1️⃣ Budget Control Engine (Over-pay Prevention)
+
+Admin panel में **Budget Control Dashboard** होगा।
+
+**Features**
+
+* API usage tracker
+* Daily / monthly budget limit
+* Cost alert notification
+* Auto shutdown option
+
+**Example**
+
+```
+API Budget Limit
+Daily Limit: ₹500
+Monthly Limit: ₹10,000
+
+If limit reached:
+AI engines → Limited Mode
+```
+
+**Purpose**
+
+✔ Over billing रोकना
+✔ Automatic cost control
+
+---
+
+# 🔑 2️⃣ External API Key System (Vendor / Supplier)
+
+Suppliers अगर advanced AI tools use करना चाहते हैं, तो वे **अपनी API key डाल सकते हैं**।
+
+**Rules**
+
+* Vendor API optional
+* Admin approval required
+* API usage vendor responsibility
+
+**Example Flow**
+
+```
+Supplier Dashboard
+
+Enter API Key
+Select AI Engine
+Admin Approval
+Activate
+```
+
+---
+
+# ⚠️ 3️⃣ API Risk Disclaimer (Vendor)
+
+Vendor API use करते समय **digital agreement** accept करेगा।
+
+**Sample Disclaimer**
+
+> Supplier acknowledges that any external API key added to SAI ROLOTECH platform is used at the supplier’s own risk.
+> SAI ROLOTECH is not responsible for API costs, data usage, or third-party service issues.
+
+---
+
+# 🛡 4️⃣ Safety & Security Engine
+
+App में **data protection + misuse prevention** होना चाहिए।
+
+### Security features
+
+* API key encryption
+* Rate limit protection
+* Fraud detection
+* Activity logging
+* Role permission system
+
+---
+
+# 🔐 5️⃣ Admin Permission Engine
+
+Admin decide करेगा:
+
+| Feature          | Access           |
+| ---------------- | ---------------- |
+| AI engines       | Admin / Supplier |
+| Machine listing  | Admin only       |
+| Supplier listing | Allowed          |
+| Job posting      | Allowed          |
+
+---
+
+# 📜 SAI ROLOTECH – Terms & Conditions (Core)
+
+## 1. Platform Purpose
+
+SAI ROLOTECH app industrial machines, materials, jobs, and services related to roll forming industry के लिए digital platform है।
+
+---
+
+## 2. Machine Sales Policy
+
+All roll forming machines sold on the platform are owned and supplied by **SAI ROLOTECH** unless otherwise specified.
+
+Third-party vendors cannot sell roll forming machines without admin approval.
+
+---
+
+## 3. Supplier Listings
+
+Suppliers can list:
+
+* raw materials
+* accessories
+* building products
+* services
+
+SAI ROLOTECH does not guarantee supplier product quality.
+
+---
+
+## 4. Lead System
+
+Leads generated through the platform may be shared with suppliers or admin for business purposes.
+
+---
+
+## 5. API Usage
+
+Users may integrate external API keys with admin approval.
+
+SAI ROLOTECH is not responsible for:
+
+* API billing
+* third-party downtime
+* external service errors
+
+---
+
+## 6. AI Tools Disclaimer
+
+AI generated suggestions, calculations, or quotations are approximate and should be verified before final business decisions.
+
+---
+
+## 7. User Responsibility
+
+Users must ensure that all information provided is accurate.
+
+Misuse of the platform may result in account suspension.
+
+---
+
+## 8. Payments
+
+Paid features such as promotions, subscriptions, or tools may be offered in the future.
+
+All payments are subject to platform policies.
+
+---
+
+## 9. Data Usage
+
+User data may be used to improve services, analytics, and marketing communication.
+
+---
+
+## 10. Liability Limitation
+
+SAI ROLOTECH shall not be liable for indirect damages, financial losses, or disputes between buyers and suppliers.
+
+---
+
+# 📱 Required App Permissions (Android & iOS Friendly)
+
+Login के समय **transparent permission request** होना चाहिए।
+
+### 1️⃣ Basic Permissions
+
+* Internet access
+* Account authentication
+
+---
+
+### 2️⃣ Optional Permissions
+
+* Notifications (for leads & updates)
+* Storage (for uploading documents or images)
+* Camera (product images)
+
+---
+
+### 3️⃣ Marketing Permissions
+
+* Push notifications
+* Email updates
+* WhatsApp contact button
+
+User opt-in होना चाहिए।
+
+---
+
+# 📢 Privacy Policy Highlights
+
+App collect कर सकता है:
+
+* name
+* phone number
+* email
+* business information
+
+Purpose:
+
+* lead communication
+* service updates
+* marketing messages
+
+Data third parties को बेचा नहीं जाएगा।
+
+---
+
+# 🧠 Engine Status System
+
+Admin panel में engine control होगा।
+
+```
+AI Engine Status
+
+Sales AI → Active
+Service AI → Active
+Supplier AI → Limited
+External API → Approval Required
+```
+
+---
+
+# ⚙️ App Structure (Final Safe Model)
+
+```
+SAI ROLOTECH PLATFORM
+
+Machine Sales System
+Supplier Marketplace
+AI Engines
+Management Engines
+Marketing Engines
+Admin Control Panel
+Budget Control System
+Security Engine
+```
+
+---
+
+# 💡 Extra Safety Features (Recommended)
+
+1. API usage alert system
+2. suspicious activity detection
+3. automatic backup
+4. admin emergency shutdown
+5. user reporting system
+
+---
+
+✅ अगर आप चाहें तो मैं अगला step भी बना सकता हूँ:
+
+**SAI ROLOTECH – Complete Legal Package**
+
+जिसमें होगा:
+
+* Privacy Policy (full)
+* Terms of Service (App Store compliant)
+* Vendor Agreement
+* API Usage Agreement
+* User Consent Screens
+
+ताकि **App Store और Play Store approval में कोई problem न आए।** 🚀
