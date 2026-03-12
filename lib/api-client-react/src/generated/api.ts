@@ -5,18 +5,35 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  AdminSettingsResponse,
+  CreateMachineBody,
+  ErrorResponse,
+  HealthStatus,
+  ListMachinesParams,
+  MachineResponse,
+  MachineViewerDataResponse,
+  RequestUploadUrlBody,
+  RequestUploadUrlResponse,
+  UpdateAdminSettingsBody,
+  UpdateMachineBody,
+  UploadVisualizationBody,
+  VisualizationResponse,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -92,6 +109,1268 @@ export function useHealthCheck<
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getHealthCheckQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns a list of all machines
+ * @summary List all machines
+ */
+export const getListMachinesUrl = (params?: ListMachinesParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/machines?${stringifiedParams}`
+    : `/api/machines`;
+};
+
+export const listMachines = async (
+  params?: ListMachinesParams,
+  options?: RequestInit,
+): Promise<MachineResponse[]> => {
+  return customFetch<MachineResponse[]>(getListMachinesUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListMachinesQueryKey = (params?: ListMachinesParams) => {
+  return [`/api/machines`, ...(params ? [params] : [])] as const;
+};
+
+export const getListMachinesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listMachines>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListMachinesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listMachines>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListMachinesQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listMachines>>> = ({
+    signal,
+  }) => listMachines(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listMachines>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListMachinesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listMachines>>
+>;
+export type ListMachinesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List all machines
+ */
+
+export function useListMachines<
+  TData = Awaited<ReturnType<typeof listMachines>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListMachinesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listMachines>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListMachinesQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Creates a new machine entry
+ * @summary Create a new machine
+ */
+export const getCreateMachineUrl = () => {
+  return `/api/machines`;
+};
+
+export const createMachine = async (
+  createMachineBody: CreateMachineBody,
+  options?: RequestInit,
+): Promise<MachineResponse> => {
+  return customFetch<MachineResponse>(getCreateMachineUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createMachineBody),
+  });
+};
+
+export const getCreateMachineMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createMachine>>,
+    TError,
+    { data: BodyType<CreateMachineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createMachine>>,
+  TError,
+  { data: BodyType<CreateMachineBody> },
+  TContext
+> => {
+  const mutationKey = ["createMachine"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createMachine>>,
+    { data: BodyType<CreateMachineBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createMachine(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateMachineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createMachine>>
+>;
+export type CreateMachineMutationBody = BodyType<CreateMachineBody>;
+export type CreateMachineMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a new machine
+ */
+export const useCreateMachine = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createMachine>>,
+    TError,
+    { data: BodyType<CreateMachineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createMachine>>,
+  TError,
+  { data: BodyType<CreateMachineBody> },
+  TContext
+> => {
+  return useMutation(getCreateMachineMutationOptions(options));
+};
+
+/**
+ * Returns a single machine by its ID
+ * @summary Get a machine by ID
+ */
+export const getGetMachineUrl = (id: number) => {
+  return `/api/machines/${id}`;
+};
+
+export const getMachine = async (
+  id: number,
+  options?: RequestInit,
+): Promise<MachineResponse> => {
+  return customFetch<MachineResponse>(getGetMachineUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetMachineQueryKey = (id: number) => {
+  return [`/api/machines/${id}`] as const;
+};
+
+export const getGetMachineQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMachine>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getMachine>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMachineQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMachine>>> = ({
+    signal,
+  }) => getMachine(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMachine>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetMachineQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMachine>>
+>;
+export type GetMachineQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Get a machine by ID
+ */
+
+export function useGetMachine<
+  TData = Awaited<ReturnType<typeof getMachine>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getMachine>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetMachineQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Updates an existing machine
+ * @summary Update a machine
+ */
+export const getUpdateMachineUrl = (id: number) => {
+  return `/api/machines/${id}`;
+};
+
+export const updateMachine = async (
+  id: number,
+  updateMachineBody: UpdateMachineBody,
+  options?: RequestInit,
+): Promise<MachineResponse> => {
+  return customFetch<MachineResponse>(getUpdateMachineUrl(id), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateMachineBody),
+  });
+};
+
+export const getUpdateMachineMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateMachine>>,
+    TError,
+    { id: number; data: BodyType<UpdateMachineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateMachine>>,
+  TError,
+  { id: number; data: BodyType<UpdateMachineBody> },
+  TContext
+> => {
+  const mutationKey = ["updateMachine"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateMachine>>,
+    { id: number; data: BodyType<UpdateMachineBody> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return updateMachine(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateMachineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateMachine>>
+>;
+export type UpdateMachineMutationBody = BodyType<UpdateMachineBody>;
+export type UpdateMachineMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Update a machine
+ */
+export const useUpdateMachine = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateMachine>>,
+    TError,
+    { id: number; data: BodyType<UpdateMachineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateMachine>>,
+  TError,
+  { id: number; data: BodyType<UpdateMachineBody> },
+  TContext
+> => {
+  return useMutation(getUpdateMachineMutationOptions(options));
+};
+
+/**
+ * Deletes a machine by ID
+ * @summary Delete a machine
+ */
+export const getDeleteMachineUrl = (id: number) => {
+  return `/api/machines/${id}`;
+};
+
+export const deleteMachine = async (
+  id: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteMachineUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteMachineMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteMachine>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteMachine>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteMachine"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteMachine>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteMachine(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteMachineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteMachine>>
+>;
+
+export type DeleteMachineMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Delete a machine
+ */
+export const useDeleteMachine = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteMachine>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteMachine>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getDeleteMachineMutationOptions(options));
+};
+
+/**
+ * Returns all visualization files for a specific machine
+ * @summary List visualizations for a machine
+ */
+export const getListMachineVisualizationsUrl = (machineId: number) => {
+  return `/api/machines/${machineId}/visualizations`;
+};
+
+export const listMachineVisualizations = async (
+  machineId: number,
+  options?: RequestInit,
+): Promise<VisualizationResponse[]> => {
+  return customFetch<VisualizationResponse[]>(
+    getListMachineVisualizationsUrl(machineId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getListMachineVisualizationsQueryKey = (machineId: number) => {
+  return [`/api/machines/${machineId}/visualizations`] as const;
+};
+
+export const getListMachineVisualizationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listMachineVisualizations>>,
+  TError = ErrorType<unknown>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listMachineVisualizations>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListMachineVisualizationsQueryKey(machineId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listMachineVisualizations>>
+  > = ({ signal }) =>
+    listMachineVisualizations(machineId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!machineId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listMachineVisualizations>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListMachineVisualizationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listMachineVisualizations>>
+>;
+export type ListMachineVisualizationsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List visualizations for a machine
+ */
+
+export function useListMachineVisualizations<
+  TData = Awaited<ReturnType<typeof listMachineVisualizations>>,
+  TError = ErrorType<unknown>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listMachineVisualizations>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListMachineVisualizationsQueryOptions(
+    machineId,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Uploads a 2D or 3D visualization file for a machine
+ * @summary Upload a visualization file
+ */
+export const getUploadVisualizationUrl = (machineId: number) => {
+  return `/api/machines/${machineId}/visualizations`;
+};
+
+export const uploadVisualization = async (
+  machineId: number,
+  uploadVisualizationBody: UploadVisualizationBody,
+  options?: RequestInit,
+): Promise<VisualizationResponse> => {
+  const formData = new FormData();
+  formData.append(`file`, uploadVisualizationBody.file);
+  formData.append(`fileType`, uploadVisualizationBody.fileType);
+  if (uploadVisualizationBody.label !== undefined) {
+    formData.append(`label`, uploadVisualizationBody.label);
+  }
+
+  return customFetch<VisualizationResponse>(
+    getUploadVisualizationUrl(machineId),
+    {
+      ...options,
+      method: "POST",
+      body: formData,
+    },
+  );
+};
+
+export const getUploadVisualizationMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof uploadVisualization>>,
+    TError,
+    { machineId: number; data: BodyType<UploadVisualizationBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof uploadVisualization>>,
+  TError,
+  { machineId: number; data: BodyType<UploadVisualizationBody> },
+  TContext
+> => {
+  const mutationKey = ["uploadVisualization"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof uploadVisualization>>,
+    { machineId: number; data: BodyType<UploadVisualizationBody> }
+  > = (props) => {
+    const { machineId, data } = props ?? {};
+
+    return uploadVisualization(machineId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UploadVisualizationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof uploadVisualization>>
+>;
+export type UploadVisualizationMutationBody = BodyType<UploadVisualizationBody>;
+export type UploadVisualizationMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Upload a visualization file
+ */
+export const useUploadVisualization = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof uploadVisualization>>,
+    TError,
+    { machineId: number; data: BodyType<UploadVisualizationBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof uploadVisualization>>,
+  TError,
+  { machineId: number; data: BodyType<UploadVisualizationBody> },
+  TContext
+> => {
+  return useMutation(getUploadVisualizationMutationOptions(options));
+};
+
+/**
+ * Deletes a visualization file by ID
+ * @summary Delete a visualization file
+ */
+export const getDeleteVisualizationUrl = (machineId: number, vizId: number) => {
+  return `/api/machines/${machineId}/visualizations/${vizId}`;
+};
+
+export const deleteVisualization = async (
+  machineId: number,
+  vizId: number,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getDeleteVisualizationUrl(machineId, vizId), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteVisualizationMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteVisualization>>,
+    TError,
+    { machineId: number; vizId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteVisualization>>,
+  TError,
+  { machineId: number; vizId: number },
+  TContext
+> => {
+  const mutationKey = ["deleteVisualization"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteVisualization>>,
+    { machineId: number; vizId: number }
+  > = (props) => {
+    const { machineId, vizId } = props ?? {};
+
+    return deleteVisualization(machineId, vizId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteVisualizationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteVisualization>>
+>;
+
+export type DeleteVisualizationMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Delete a visualization file
+ */
+export const useDeleteVisualization = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteVisualization>>,
+    TError,
+    { machineId: number; vizId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteVisualization>>,
+  TError,
+  { machineId: number; vizId: number },
+  TContext
+> => {
+  return useMutation(getDeleteVisualizationMutationOptions(options));
+};
+
+/**
+ * Returns the admin visualization settings for a machine
+ * @summary Get admin settings for a machine
+ */
+export const getGetAdminSettingsUrl = (machineId: number) => {
+  return `/api/machines/${machineId}/admin-settings`;
+};
+
+export const getAdminSettings = async (
+  machineId: number,
+  options?: RequestInit,
+): Promise<AdminSettingsResponse> => {
+  return customFetch<AdminSettingsResponse>(getGetAdminSettingsUrl(machineId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetAdminSettingsQueryKey = (machineId: number) => {
+  return [`/api/machines/${machineId}/admin-settings`] as const;
+};
+
+export const getGetAdminSettingsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminSettings>>,
+  TError = ErrorType<unknown>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAdminSettings>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAdminSettingsQueryKey(machineId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAdminSettings>>
+  > = ({ signal }) =>
+    getAdminSettings(machineId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!machineId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminSettings>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAdminSettingsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminSettings>>
+>;
+export type GetAdminSettingsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get admin settings for a machine
+ */
+
+export function useGetAdminSettings<
+  TData = Awaited<ReturnType<typeof getAdminSettings>>,
+  TError = ErrorType<unknown>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAdminSettings>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAdminSettingsQueryOptions(machineId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Updates the admin visualization settings for a machine
+ * @summary Update admin settings for a machine
+ */
+export const getUpdateAdminSettingsUrl = (machineId: number) => {
+  return `/api/machines/${machineId}/admin-settings`;
+};
+
+export const updateAdminSettings = async (
+  machineId: number,
+  updateAdminSettingsBody: UpdateAdminSettingsBody,
+  options?: RequestInit,
+): Promise<AdminSettingsResponse> => {
+  return customFetch<AdminSettingsResponse>(
+    getUpdateAdminSettingsUrl(machineId),
+    {
+      ...options,
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateAdminSettingsBody),
+    },
+  );
+};
+
+export const getUpdateAdminSettingsMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateAdminSettings>>,
+    TError,
+    { machineId: number; data: BodyType<UpdateAdminSettingsBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateAdminSettings>>,
+  TError,
+  { machineId: number; data: BodyType<UpdateAdminSettingsBody> },
+  TContext
+> => {
+  const mutationKey = ["updateAdminSettings"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateAdminSettings>>,
+    { machineId: number; data: BodyType<UpdateAdminSettingsBody> }
+  > = (props) => {
+    const { machineId, data } = props ?? {};
+
+    return updateAdminSettings(machineId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateAdminSettingsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateAdminSettings>>
+>;
+export type UpdateAdminSettingsMutationBody = BodyType<UpdateAdminSettingsBody>;
+export type UpdateAdminSettingsMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update admin settings for a machine
+ */
+export const useUpdateAdminSettings = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateAdminSettings>>,
+    TError,
+    { machineId: number; data: BodyType<UpdateAdminSettingsBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateAdminSettings>>,
+  TError,
+  { machineId: number; data: BodyType<UpdateAdminSettingsBody> },
+  TContext
+> => {
+  return useMutation(getUpdateAdminSettingsMutationOptions(options));
+};
+
+/**
+ * Returns combined machine data, visualizations, and active admin toggles for the viewer
+ * @summary Get machine viewer data
+ */
+export const getGetMachineViewerDataUrl = (machineId: number) => {
+  return `/api/machines/${machineId}/viewer-data`;
+};
+
+export const getMachineViewerData = async (
+  machineId: number,
+  options?: RequestInit,
+): Promise<MachineViewerDataResponse> => {
+  return customFetch<MachineViewerDataResponse>(
+    getGetMachineViewerDataUrl(machineId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetMachineViewerDataQueryKey = (machineId: number) => {
+  return [`/api/machines/${machineId}/viewer-data`] as const;
+};
+
+export const getGetMachineViewerDataQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMachineViewerData>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getMachineViewerData>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMachineViewerDataQueryKey(machineId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getMachineViewerData>>
+  > = ({ signal }) =>
+    getMachineViewerData(machineId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!machineId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMachineViewerData>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetMachineViewerDataQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMachineViewerData>>
+>;
+export type GetMachineViewerDataQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Get machine viewer data
+ */
+
+export function useGetMachineViewerData<
+  TData = Awaited<ReturnType<typeof getMachineViewerData>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  machineId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getMachineViewerData>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetMachineViewerDataQueryOptions(machineId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns a presigned URL for uploading a file to object storage
+ * @summary Request a presigned upload URL
+ */
+export const getRequestUploadUrlUrl = () => {
+  return `/api/storage/uploads/request-url`;
+};
+
+export const requestUploadUrl = async (
+  requestUploadUrlBody: RequestUploadUrlBody,
+  options?: RequestInit,
+): Promise<RequestUploadUrlResponse> => {
+  return customFetch<RequestUploadUrlResponse>(getRequestUploadUrlUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(requestUploadUrlBody),
+  });
+};
+
+export const getRequestUploadUrlMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof requestUploadUrl>>,
+    TError,
+    { data: BodyType<RequestUploadUrlBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof requestUploadUrl>>,
+  TError,
+  { data: BodyType<RequestUploadUrlBody> },
+  TContext
+> => {
+  const mutationKey = ["requestUploadUrl"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof requestUploadUrl>>,
+    { data: BodyType<RequestUploadUrlBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return requestUploadUrl(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RequestUploadUrlMutationResult = NonNullable<
+  Awaited<ReturnType<typeof requestUploadUrl>>
+>;
+export type RequestUploadUrlMutationBody = BodyType<RequestUploadUrlBody>;
+export type RequestUploadUrlMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Request a presigned upload URL
+ */
+export const useRequestUploadUrl = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof requestUploadUrl>>,
+    TError,
+    { data: BodyType<RequestUploadUrlBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof requestUploadUrl>>,
+  TError,
+  { data: BodyType<RequestUploadUrlBody> },
+  TContext
+> => {
+  return useMutation(getRequestUploadUrlMutationOptions(options));
+};
+
+/**
+ * Serves public assets from object storage search paths
+ * @summary Serve a public object
+ */
+export const getGetPublicObjectUrl = (filePath: string) => {
+  return `/api/storage/public-objects/${filePath}`;
+};
+
+export const getPublicObject = async (
+  filePath: string,
+  options?: RequestInit,
+): Promise<Blob> => {
+  return customFetch<Blob>(getGetPublicObjectUrl(filePath), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetPublicObjectQueryKey = (filePath: string) => {
+  return [`/api/storage/public-objects/${filePath}`] as const;
+};
+
+export const getGetPublicObjectQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPublicObject>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  filePath: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getPublicObject>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetPublicObjectQueryKey(filePath);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicObject>>> = ({
+    signal,
+  }) => getPublicObject(filePath, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!filePath,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPublicObject>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetPublicObjectQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPublicObject>>
+>;
+export type GetPublicObjectQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Serve a public object
+ */
+
+export function useGetPublicObject<
+  TData = Awaited<ReturnType<typeof getPublicObject>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  filePath: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getPublicObject>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPublicObjectQueryOptions(filePath, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Serves uploaded object entities from object storage
+ * @summary Serve an uploaded object
+ */
+export const getGetStorageObjectUrl = (objectPath: string) => {
+  return `/api/storage/objects/${objectPath}`;
+};
+
+export const getStorageObject = async (
+  objectPath: string,
+  options?: RequestInit,
+): Promise<Blob> => {
+  return customFetch<Blob>(getGetStorageObjectUrl(objectPath), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetStorageObjectQueryKey = (objectPath: string) => {
+  return [`/api/storage/objects/${objectPath}`] as const;
+};
+
+export const getGetStorageObjectQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStorageObject>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  objectPath: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStorageObject>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetStorageObjectQueryKey(objectPath);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getStorageObject>>
+  > = ({ signal }) =>
+    getStorageObject(objectPath, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!objectPath,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStorageObject>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetStorageObjectQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStorageObject>>
+>;
+export type GetStorageObjectQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Serve an uploaded object
+ */
+
+export function useGetStorageObject<
+  TData = Awaited<ReturnType<typeof getStorageObject>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  objectPath: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStorageObject>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetStorageObjectQueryOptions(objectPath, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

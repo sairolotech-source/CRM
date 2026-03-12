@@ -14,3 +14,519 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Returns a list of all machines
+ * @summary List all machines
+ */
+export const ListMachinesQueryParams = zod.object({
+  category: zod.coerce.string().optional().describe("Filter by category"),
+});
+
+export const ListMachinesResponseItem = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  model: zod.string(),
+  category: zod.string(),
+  capacity: zod.string().nullish(),
+  power: zod.string().nullish(),
+  speed: zod.string().nullish(),
+  price: zod.string().nullish(),
+  description: zod.string().nullish(),
+  weight: zod.string().nullish(),
+  dimensions: zod.string().nullish(),
+  rollers: zod.string().nullish(),
+  color: zod.string().nullish(),
+  detailedDescription: zod.string().nullish(),
+  warranty: zod.string().nullish(),
+  tags: zod.array(zod.string()).nullish(),
+  specs: zod
+    .array(
+      zod.object({
+        label: zod.string(),
+        value: zod.string(),
+      }),
+    )
+    .nullish(),
+  features: zod.array(zod.string()).nullish(),
+  applications: zod.array(zod.string()).nullish(),
+  accessories: zod.array(zod.string()).nullish(),
+  images: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        url: zod.string(),
+        label: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .nullish(),
+  videos: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        title: zod.string(),
+        duration: zod.string(),
+        thumbnail: zod.string(),
+        youtubeId: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .nullish(),
+  createdAt: zod.date(),
+  updatedAt: zod.date(),
+});
+export const ListMachinesResponse = zod.array(ListMachinesResponseItem);
+
+/**
+ * Creates a new machine entry
+ * @summary Create a new machine
+ */
+export const CreateMachineBody = zod.object({
+  name: zod.string(),
+  model: zod.string(),
+  category: zod.string(),
+  capacity: zod.string().optional(),
+  power: zod.string().optional(),
+  speed: zod.string().optional(),
+  price: zod.string().optional(),
+  description: zod.string().optional(),
+  weight: zod.string().optional(),
+  dimensions: zod.string().optional(),
+  rollers: zod.string().optional(),
+  color: zod.string().optional(),
+  detailedDescription: zod.string().optional(),
+  warranty: zod.string().optional(),
+  tags: zod.array(zod.string()).optional(),
+  specs: zod
+    .array(
+      zod.object({
+        label: zod.string(),
+        value: zod.string(),
+      }),
+    )
+    .optional(),
+  features: zod.array(zod.string()).optional(),
+  applications: zod.array(zod.string()).optional(),
+  accessories: zod.array(zod.string()).optional(),
+  images: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        url: zod.string(),
+        label: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .optional(),
+  videos: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        title: zod.string(),
+        duration: zod.string(),
+        thumbnail: zod.string(),
+        youtubeId: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .optional(),
+});
+
+/**
+ * Returns a single machine by its ID
+ * @summary Get a machine by ID
+ */
+export const GetMachineParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetMachineResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  model: zod.string(),
+  category: zod.string(),
+  capacity: zod.string().nullish(),
+  power: zod.string().nullish(),
+  speed: zod.string().nullish(),
+  price: zod.string().nullish(),
+  description: zod.string().nullish(),
+  weight: zod.string().nullish(),
+  dimensions: zod.string().nullish(),
+  rollers: zod.string().nullish(),
+  color: zod.string().nullish(),
+  detailedDescription: zod.string().nullish(),
+  warranty: zod.string().nullish(),
+  tags: zod.array(zod.string()).nullish(),
+  specs: zod
+    .array(
+      zod.object({
+        label: zod.string(),
+        value: zod.string(),
+      }),
+    )
+    .nullish(),
+  features: zod.array(zod.string()).nullish(),
+  applications: zod.array(zod.string()).nullish(),
+  accessories: zod.array(zod.string()).nullish(),
+  images: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        url: zod.string(),
+        label: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .nullish(),
+  videos: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        title: zod.string(),
+        duration: zod.string(),
+        thumbnail: zod.string(),
+        youtubeId: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .nullish(),
+  createdAt: zod.date(),
+  updatedAt: zod.date(),
+});
+
+/**
+ * Updates an existing machine
+ * @summary Update a machine
+ */
+export const UpdateMachineParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateMachineBody = zod.object({
+  name: zod.string().optional(),
+  model: zod.string().optional(),
+  category: zod.string().optional(),
+  capacity: zod.string().optional(),
+  power: zod.string().optional(),
+  speed: zod.string().optional(),
+  price: zod.string().optional(),
+  description: zod.string().optional(),
+  weight: zod.string().optional(),
+  dimensions: zod.string().optional(),
+  rollers: zod.string().optional(),
+  color: zod.string().optional(),
+  detailedDescription: zod.string().optional(),
+  warranty: zod.string().optional(),
+  tags: zod.array(zod.string()).optional(),
+  specs: zod
+    .array(
+      zod.object({
+        label: zod.string(),
+        value: zod.string(),
+      }),
+    )
+    .optional(),
+  features: zod.array(zod.string()).optional(),
+  applications: zod.array(zod.string()).optional(),
+  accessories: zod.array(zod.string()).optional(),
+  images: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        url: zod.string(),
+        label: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .optional(),
+  videos: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        title: zod.string(),
+        duration: zod.string(),
+        thumbnail: zod.string(),
+        youtubeId: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .optional(),
+});
+
+export const UpdateMachineResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  model: zod.string(),
+  category: zod.string(),
+  capacity: zod.string().nullish(),
+  power: zod.string().nullish(),
+  speed: zod.string().nullish(),
+  price: zod.string().nullish(),
+  description: zod.string().nullish(),
+  weight: zod.string().nullish(),
+  dimensions: zod.string().nullish(),
+  rollers: zod.string().nullish(),
+  color: zod.string().nullish(),
+  detailedDescription: zod.string().nullish(),
+  warranty: zod.string().nullish(),
+  tags: zod.array(zod.string()).nullish(),
+  specs: zod
+    .array(
+      zod.object({
+        label: zod.string(),
+        value: zod.string(),
+      }),
+    )
+    .nullish(),
+  features: zod.array(zod.string()).nullish(),
+  applications: zod.array(zod.string()).nullish(),
+  accessories: zod.array(zod.string()).nullish(),
+  images: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        url: zod.string(),
+        label: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .nullish(),
+  videos: zod
+    .array(
+      zod.object({
+        id: zod.string(),
+        title: zod.string(),
+        duration: zod.string(),
+        thumbnail: zod.string(),
+        youtubeId: zod.string(),
+        type: zod.string(),
+      }),
+    )
+    .nullish(),
+  createdAt: zod.date(),
+  updatedAt: zod.date(),
+});
+
+/**
+ * Deletes a machine by ID
+ * @summary Delete a machine
+ */
+export const DeleteMachineParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+/**
+ * Returns all visualization files for a specific machine
+ * @summary List visualizations for a machine
+ */
+export const ListMachineVisualizationsParams = zod.object({
+  machineId: zod.coerce.number(),
+});
+
+export const ListMachineVisualizationsResponseItem = zod.object({
+  id: zod.number(),
+  machineId: zod.number(),
+  fileType: zod.string(),
+  fileUrl: zod.string(),
+  objectPath: zod.string().nullish(),
+  fileName: zod.string(),
+  mimeType: zod.string().nullish(),
+  label: zod.string().nullish(),
+  createdAt: zod.date(),
+  updatedAt: zod.date(),
+});
+export const ListMachineVisualizationsResponse = zod.array(
+  ListMachineVisualizationsResponseItem,
+);
+
+/**
+ * Uploads a 2D or 3D visualization file for a machine
+ * @summary Upload a visualization file
+ */
+export const UploadVisualizationParams = zod.object({
+  machineId: zod.coerce.number(),
+});
+
+export const UploadVisualizationBody = zod.object({
+  file: zod.instanceof(File),
+  fileType: zod.enum(["2d", "3d"]),
+  label: zod.string().optional(),
+});
+
+/**
+ * Deletes a visualization file by ID
+ * @summary Delete a visualization file
+ */
+export const DeleteVisualizationParams = zod.object({
+  machineId: zod.coerce.number(),
+  vizId: zod.coerce.number(),
+});
+
+/**
+ * Returns the admin visualization settings for a machine
+ * @summary Get admin settings for a machine
+ */
+export const GetAdminSettingsParams = zod.object({
+  machineId: zod.coerce.number(),
+});
+
+export const GetAdminSettingsResponse = zod.object({
+  id: zod.number(),
+  machineId: zod.number(),
+  enable2dView: zod.boolean(),
+  enable3dView: zod.boolean(),
+  enableAnimation: zod.boolean(),
+  enablePartHighlight: zod.boolean(),
+  enableDrawingDownload: zod.boolean(),
+  createdAt: zod.date(),
+  updatedAt: zod.date(),
+});
+
+/**
+ * Updates the admin visualization settings for a machine
+ * @summary Update admin settings for a machine
+ */
+export const UpdateAdminSettingsParams = zod.object({
+  machineId: zod.coerce.number(),
+});
+
+export const UpdateAdminSettingsBody = zod.object({
+  enable2dView: zod.boolean().optional(),
+  enable3dView: zod.boolean().optional(),
+  enableAnimation: zod.boolean().optional(),
+  enablePartHighlight: zod.boolean().optional(),
+  enableDrawingDownload: zod.boolean().optional(),
+});
+
+export const UpdateAdminSettingsResponse = zod.object({
+  id: zod.number(),
+  machineId: zod.number(),
+  enable2dView: zod.boolean(),
+  enable3dView: zod.boolean(),
+  enableAnimation: zod.boolean(),
+  enablePartHighlight: zod.boolean(),
+  enableDrawingDownload: zod.boolean(),
+  createdAt: zod.date(),
+  updatedAt: zod.date(),
+});
+
+/**
+ * Returns combined machine data, visualizations, and active admin toggles for the viewer
+ * @summary Get machine viewer data
+ */
+export const GetMachineViewerDataParams = zod.object({
+  machineId: zod.coerce.number(),
+});
+
+export const GetMachineViewerDataResponse = zod.object({
+  machine: zod.object({
+    id: zod.number(),
+    name: zod.string(),
+    model: zod.string(),
+    category: zod.string(),
+    capacity: zod.string().nullish(),
+    power: zod.string().nullish(),
+    speed: zod.string().nullish(),
+    price: zod.string().nullish(),
+    description: zod.string().nullish(),
+    weight: zod.string().nullish(),
+    dimensions: zod.string().nullish(),
+    rollers: zod.string().nullish(),
+    color: zod.string().nullish(),
+    detailedDescription: zod.string().nullish(),
+    warranty: zod.string().nullish(),
+    tags: zod.array(zod.string()).nullish(),
+    specs: zod
+      .array(
+        zod.object({
+          label: zod.string(),
+          value: zod.string(),
+        }),
+      )
+      .nullish(),
+    features: zod.array(zod.string()).nullish(),
+    applications: zod.array(zod.string()).nullish(),
+    accessories: zod.array(zod.string()).nullish(),
+    images: zod
+      .array(
+        zod.object({
+          id: zod.string(),
+          url: zod.string(),
+          label: zod.string(),
+          type: zod.string(),
+        }),
+      )
+      .nullish(),
+    videos: zod
+      .array(
+        zod.object({
+          id: zod.string(),
+          title: zod.string(),
+          duration: zod.string(),
+          thumbnail: zod.string(),
+          youtubeId: zod.string(),
+          type: zod.string(),
+        }),
+      )
+      .nullish(),
+    createdAt: zod.date(),
+    updatedAt: zod.date(),
+  }),
+  visualizations: zod.array(
+    zod.object({
+      id: zod.number(),
+      machineId: zod.number(),
+      fileType: zod.string(),
+      fileUrl: zod.string(),
+      objectPath: zod.string().nullish(),
+      fileName: zod.string(),
+      mimeType: zod.string().nullish(),
+      label: zod.string().nullish(),
+      createdAt: zod.date(),
+      updatedAt: zod.date(),
+    }),
+  ),
+  settings: zod.object({
+    id: zod.number(),
+    machineId: zod.number(),
+    enable2dView: zod.boolean(),
+    enable3dView: zod.boolean(),
+    enableAnimation: zod.boolean(),
+    enablePartHighlight: zod.boolean(),
+    enableDrawingDownload: zod.boolean(),
+    createdAt: zod.date(),
+    updatedAt: zod.date(),
+  }),
+});
+
+/**
+ * Returns a presigned URL for uploading a file to object storage
+ * @summary Request a presigned upload URL
+ */
+export const RequestUploadUrlBody = zod.object({
+  name: zod.string(),
+  size: zod.number(),
+  contentType: zod.string(),
+});
+
+export const RequestUploadUrlResponse = zod.object({
+  uploadURL: zod.string(),
+  objectPath: zod.string(),
+});
+
+/**
+ * Serves public assets from object storage search paths
+ * @summary Serve a public object
+ */
+export const GetPublicObjectParams = zod.object({
+  filePath: zod.coerce.string(),
+});
+
+/**
+ * Serves uploaded object entities from object storage
+ * @summary Serve an uploaded object
+ */
+export const GetStorageObjectParams = zod.object({
+  objectPath: zod.coerce.string(),
+});

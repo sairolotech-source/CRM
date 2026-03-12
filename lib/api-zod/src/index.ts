@@ -1,2 +1,12 @@
 export * from "./generated/api";
-export * from "./generated/types";
+export type { AdminSettingsResponse } from "./generated/types/adminSettingsResponse";
+export type { ErrorResponse } from "./generated/types/errorResponse";
+export type { HealthStatus } from "./generated/types/healthStatus";
+export type { ImageItem } from "./generated/types/imageItem";
+export type { ListMachinesParams } from "./generated/types/listMachinesParams";
+export type { MachineResponse } from "./generated/types/machineResponse";
+export type { MachineViewerDataResponse } from "./generated/types/machineViewerDataResponse";
+export type { SpecItem } from "./generated/types/specItem";
+export type { UploadVisualizationBodyFileType } from "./generated/types/uploadVisualizationBodyFileType";
+export type { VideoItem } from "./generated/types/videoItem";
+export type { VisualizationResponse } from "./generated/types/visualizationResponse";

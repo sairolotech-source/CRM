@@ -56,8 +56,16 @@ Express 5 API server. Routes live in `src/routes/` and use `@workspace/api-zod` 
 
 - Entry: `src/index.ts` — reads `PORT`, starts Express
 - App setup: `src/app.ts` — mounts CORS, JSON/urlencoded parsing, routes at `/api`
-- Routes: `src/routes/index.ts` mounts sub-routers; `src/routes/health.ts` exposes `GET /health` (full path: `/api/health`)
-- Depends on: `@workspace/db`, `@workspace/api-zod`
+- Routes: `src/routes/index.ts` mounts sub-routers
+  - `health.ts` — `GET /api/healthz`
+  - `machines.ts` — CRUD: `GET /api/machines`, `GET /api/machines/:id`, `POST /api/machines`, `PUT /api/machines/:id`, `DELETE /api/machines/:id`
+  - `visualizations.ts` — `GET /api/machines/:machineId/visualizations`, `POST` (multipart upload), `DELETE /api/machines/:machineId/visualizations/:vizId`
+  - `adminSettings.ts` — `GET /api/machines/:machineId/admin-settings`, `PUT` (update toggles)
+  - `viewerData.ts` — `GET /api/machines/:machineId/viewer-data` (combined machine + viz + settings, respects toggles)
+  - `storage.ts` — Object storage presigned URL + file serving routes
+- `src/lib/objectStorage.ts` — GCS client wrapper for Replit Object Storage
+- `src/lib/objectAcl.ts` — ACL framework for object access control
+- Depends on: `@workspace/db`, `@workspace/api-zod`, `@google-cloud/storage`, `multer`
 - `pnpm --filter @workspace/api-server run dev` — run the dev server
 - `pnpm --filter @workspace/api-server run build` — production esbuild bundle (`dist/index.cjs`)
 - Build bundles an allowlist of deps (express, cors, pg, drizzle-orm, zod, etc.) and externalizes the rest
@@ -68,7 +76,9 @@ Database layer using Drizzle ORM with PostgreSQL. Exports a Drizzle client insta
 
 - `src/index.ts` — creates a `Pool` + Drizzle instance, exports schema
 - `src/schema/index.ts` — barrel re-export of all models
-- `src/schema/<modelname>.ts` — table definitions with `drizzle-zod` insert schemas (no models definitions exist right now)
+- `src/schema/machines.ts` — `machinesTable` with full specs (name, model, category, capacity, power, speed, price, etc.) + JSONB fields (tags, specs, features, applications, accessories, images, videos)
+- `src/schema/machineVisualizations.ts` — `machineVisualizationsTable` for 2D/3D file references per machine (fileType, fileUrl, objectPath, fileName, mimeType, label)
+- `src/schema/adminSettings.ts` — `adminSettingsTable` for per-machine feature toggles (enable2dView, enable3dView, enableAnimation, enablePartHighlight, enableDrawingDownload)
 - `drizzle.config.ts` — Drizzle Kit config (requires `DATABASE_URL`, automatically provided by Replit)
 - Exports: `.` (pool, db, schema), `./schema` (schema only)
 

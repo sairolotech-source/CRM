@@ -10,6 +10,14 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: machines
+    description: Machine CRUD operations
+  - name: visualizations
+    description: Machine visualization file management
+  - name: admin
+    description: Admin settings for visualization features
+  - name: storage
+    description: Object storage operations
 paths:
   /healthz:
     get:
@@ -24,6 +32,358 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /machines:
+    get:
+      operationId: listMachines
+      tags: [machines]
+      summary: List all machines
+      description: Returns a list of all machines
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+          description: Filter by category
+      responses:
+        "200":
+          description: List of machines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MachineResponse"
+    post:
+      operationId: createMachine
+      tags: [machines]
+      summary: Create a new machine
+      description: Creates a new machine entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMachineBody"
+      responses:
+        "201":
+          description: Machine created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineResponse"
+
+  /machines/{id}:
+    get:
+      operationId: getMachine
+      tags: [machines]
+      summary: Get a machine by ID
+      description: Returns a single machine by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Machine details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineResponse"
+        "404":
+          description: Machine not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateMachine
+      tags: [machines]
+      summary: Update a machine
+      description: Updates an existing machine
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMachineBody"
+      responses:
+        "200":
+          description: Machine updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineResponse"
+        "404":
+          description: Machine not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteMachine
+      tags: [machines]
+      summary: Delete a machine
+      description: Deletes a machine by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Machine deleted
+        "404":
+          description: Machine not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /machines/{machineId}/visualizations:
+    get:
+      operationId: listMachineVisualizations
+      tags: [visualizations]
+      summary: List visualizations for a machine
+      description: Returns all visualization files for a specific machine
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of visualizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VisualizationResponse"
+    post:
+      operationId: uploadVisualization
+      tags: [visualizations]
+      summary: Upload a visualization file
+      description: Uploads a 2D or 3D visualization file for a machine
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                fileType:
+                  type: string
+                  enum: [2d, 3d]
+                label:
+                  type: string
+              required:
+                - file
+                - fileType
+      responses:
+        "201":
+          description: Visualization uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisualizationResponse"
+        "400":
+          description: Invalid file type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /machines/{machineId}/visualizations/{vizId}:
+    delete:
+      operationId: deleteVisualization
+      tags: [visualizations]
+      summary: Delete a visualization file
+      description: Deletes a visualization file by ID
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: vizId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Visualization deleted
+        "404":
+          description: Visualization not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /machines/{machineId}/admin-settings:
+    get:
+      operationId: getAdminSettings
+      tags: [admin]
+      summary: Get admin settings for a machine
+      description: Returns the admin visualization settings for a machine
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Admin settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSettingsResponse"
+    put:
+      operationId: updateAdminSettings
+      tags: [admin]
+      summary: Update admin settings for a machine
+      description: Updates the admin visualization settings for a machine
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAdminSettingsBody"
+      responses:
+        "200":
+          description: Admin settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSettingsResponse"
+
+  /machines/{machineId}/viewer-data:
+    get:
+      operationId: getMachineViewerData
+      tags: [machines]
+      summary: Get machine viewer data
+      description: Returns combined machine data, visualizations, and active admin toggles for the viewer
+      parameters:
+        - name: machineId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Machine viewer data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineViewerDataResponse"
+        "404":
+          description: Machine not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /storage/uploads/request-url:
+    post:
+      operationId: requestUploadUrl
+      tags: [storage]
+      summary: Request a presigned upload URL
+      description: Returns a presigned URL for uploading a file to object storage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestUploadUrlBody"
+      responses:
+        "200":
+          description: Upload URL generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestUploadUrlResponse"
+
+  /storage/public-objects/{filePath}:
+    get:
+      operationId: getPublicObject
+      tags: [storage]
+      summary: Serve a public object
+      description: Serves public assets from object storage search paths
+      parameters:
+        - name: filePath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: File content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /storage/objects/{objectPath}:
+    get:
+      operationId: getStorageObject
+      tags: [storage]
+      summary: Serve an uploaded object
+      description: Serves uploaded object entities from object storage
+      parameters:
+        - name: objectPath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: File content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Object not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +394,404 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    SpecItem:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+      required:
+        - label
+        - value
+
+    ImageItem:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+      required:
+        - id
+        - url
+        - label
+        - type
+
+    VideoItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        duration:
+          type: string
+        thumbnail:
+          type: string
+        youtubeId:
+          type: string
+        type:
+          type: string
+      required:
+        - id
+        - title
+        - duration
+        - thumbnail
+        - youtubeId
+        - type
+
+    CreateMachineBody:
+      type: object
+      properties:
+        name:
+          type: string
+        model:
+          type: string
+        category:
+          type: string
+        capacity:
+          type: string
+        power:
+          type: string
+        speed:
+          type: string
+        price:
+          type: string
+        description:
+          type: string
+        weight:
+          type: string
+        dimensions:
+          type: string
+        rollers:
+          type: string
+        color:
+          type: string
+        detailedDescription:
+          type: string
+        warranty:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        specs:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpecItem"
+        features:
+          type: array
+          items:
+            type: string
+        applications:
+          type: array
+          items:
+            type: string
+        accessories:
+          type: array
+          items:
+            type: string
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImageItem"
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/VideoItem"
+      required:
+        - name
+        - model
+        - category
+
+    UpdateMachineBody:
+      type: object
+      properties:
+        name:
+          type: string
+        model:
+          type: string
+        category:
+          type: string
+        capacity:
+          type: string
+        power:
+          type: string
+        speed:
+          type: string
+        price:
+          type: string
+        description:
+          type: string
+        weight:
+          type: string
+        dimensions:
+          type: string
+        rollers:
+          type: string
+        color:
+          type: string
+        detailedDescription:
+          type: string
+        warranty:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        specs:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpecItem"
+        features:
+          type: array
+          items:
+            type: string
+        applications:
+          type: array
+          items:
+            type: string
+        accessories:
+          type: array
+          items:
+            type: string
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImageItem"
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/VideoItem"
+
+    MachineResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        model:
+          type: string
+        category:
+          type: string
+        capacity:
+          type: string
+          nullable: true
+        power:
+          type: string
+          nullable: true
+        speed:
+          type: string
+          nullable: true
+        price:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        weight:
+          type: string
+          nullable: true
+        dimensions:
+          type: string
+          nullable: true
+        rollers:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        detailedDescription:
+          type: string
+          nullable: true
+        warranty:
+          type: string
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+          nullable: true
+        specs:
+          type: array
+          items:
+            $ref: "#/components/schemas/SpecItem"
+          nullable: true
+        features:
+          type: array
+          items:
+            type: string
+          nullable: true
+        applications:
+          type: array
+          items:
+            type: string
+          nullable: true
+        accessories:
+          type: array
+          items:
+            type: string
+          nullable: true
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ImageItem"
+          nullable: true
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/VideoItem"
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - model
+        - category
+        - createdAt
+        - updatedAt
+
+    VisualizationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        machineId:
+          type: integer
+        fileType:
+          type: string
+        fileUrl:
+          type: string
+        objectPath:
+          type: string
+          nullable: true
+        fileName:
+          type: string
+        mimeType:
+          type: string
+          nullable: true
+        label:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - machineId
+        - fileType
+        - fileUrl
+        - fileName
+        - createdAt
+        - updatedAt
+
+    AdminSettingsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        machineId:
+          type: integer
+        enable2dView:
+          type: boolean
+        enable3dView:
+          type: boolean
+        enableAnimation:
+          type: boolean
+        enablePartHighlight:
+          type: boolean
+        enableDrawingDownload:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - machineId
+        - enable2dView
+        - enable3dView
+        - enableAnimation
+        - enablePartHighlight
+        - enableDrawingDownload
+        - createdAt
+        - updatedAt
+
+    UpdateAdminSettingsBody:
+      type: object
+      properties:
+        enable2dView:
+          type: boolean
+        enable3dView:
+          type: boolean
+        enableAnimation:
+          type: boolean
+        enablePartHighlight:
+          type: boolean
+        enableDrawingDownload:
+          type: boolean
+
+    MachineViewerDataResponse:
+      type: object
+      properties:
+        machine:
+          $ref: "#/components/schemas/MachineResponse"
+        visualizations:
+          type: array
+          items:
+            $ref: "#/components/schemas/VisualizationResponse"
+        settings:
+          $ref: "#/components/schemas/AdminSettingsResponse"
+      required:
+        - machine
+        - visualizations
+        - settings
+
+    RequestUploadUrlBody:
+      type: object
+      properties:
+        name:
+          type: string
+        size:
+          type: number
+        contentType:
+          type: string
+      required:
+        - name
+        - size
+        - contentType
+
+    RequestUploadUrlResponse:
+      type: object
+      properties:
+        uploadURL:
+          type: string
+        objectPath:
+          type: string
+      required:
+        - uploadURL
+        - objectPath

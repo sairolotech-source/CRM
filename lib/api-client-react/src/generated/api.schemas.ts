@@ -8,3 +8,174 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface ErrorResponse {
+  error: string;
+}
+
+export interface SpecItem {
+  label: string;
+  value: string;
+}
+
+export interface ImageItem {
+  id: string;
+  url: string;
+  label: string;
+  type: string;
+}
+
+export interface VideoItem {
+  id: string;
+  title: string;
+  duration: string;
+  thumbnail: string;
+  youtubeId: string;
+  type: string;
+}
+
+export interface CreateMachineBody {
+  name: string;
+  model: string;
+  category: string;
+  capacity?: string;
+  power?: string;
+  speed?: string;
+  price?: string;
+  description?: string;
+  weight?: string;
+  dimensions?: string;
+  rollers?: string;
+  color?: string;
+  detailedDescription?: string;
+  warranty?: string;
+  tags?: string[];
+  specs?: SpecItem[];
+  features?: string[];
+  applications?: string[];
+  accessories?: string[];
+  images?: ImageItem[];
+  videos?: VideoItem[];
+}
+
+export interface UpdateMachineBody {
+  name?: string;
+  model?: string;
+  category?: string;
+  capacity?: string;
+  power?: string;
+  speed?: string;
+  price?: string;
+  description?: string;
+  weight?: string;
+  dimensions?: string;
+  rollers?: string;
+  color?: string;
+  detailedDescription?: string;
+  warranty?: string;
+  tags?: string[];
+  specs?: SpecItem[];
+  features?: string[];
+  applications?: string[];
+  accessories?: string[];
+  images?: ImageItem[];
+  videos?: VideoItem[];
+}
+
+export interface MachineResponse {
+  id: number;
+  name: string;
+  model: string;
+  category: string;
+  capacity?: string | null;
+  power?: string | null;
+  speed?: string | null;
+  price?: string | null;
+  description?: string | null;
+  weight?: string | null;
+  dimensions?: string | null;
+  rollers?: string | null;
+  color?: string | null;
+  detailedDescription?: string | null;
+  warranty?: string | null;
+  tags?: string[] | null;
+  specs?: SpecItem[] | null;
+  features?: string[] | null;
+  applications?: string[] | null;
+  accessories?: string[] | null;
+  images?: ImageItem[] | null;
+  videos?: VideoItem[] | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface VisualizationResponse {
+  id: number;
+  machineId: number;
+  fileType: string;
+  fileUrl: string;
+  objectPath?: string | null;
+  fileName: string;
+  mimeType?: string | null;
+  label?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminSettingsResponse {
+  id: number;
+  machineId: number;
+  enable2dView: boolean;
+  enable3dView: boolean;
+  enableAnimation: boolean;
+  enablePartHighlight: boolean;
+  enableDrawingDownload: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateAdminSettingsBody {
+  enable2dView?: boolean;
+  enable3dView?: boolean;
+  enableAnimation?: boolean;
+  enablePartHighlight?: boolean;
+  enableDrawingDownload?: boolean;
+}
+
+export interface MachineViewerDataResponse {
+  machine: MachineResponse;
+  visualizations: VisualizationResponse[];
+  settings: AdminSettingsResponse;
+}
+
+export interface RequestUploadUrlBody {
+  name: string;
+  size: number;
+  contentType: string;
+}
+
+export interface RequestUploadUrlResponse {
+  uploadURL: string;
+  objectPath: string;
+}
+
+export type ListMachinesParams = {
+  /**
+   * Filter by category
+   */
+  category?: string;
+};
+
+export type UploadVisualizationBodyFileType =
+  (typeof UploadVisualizationBodyFileType)[keyof typeof UploadVisualizationBodyFileType];
+
+export const UploadVisualizationBodyFileType = {
+  "2d": "2d",
+  "3d": "3d",
+} as const;
+
+export type UploadVisualizationBody = {
+  file: Blob;
+  fileType: UploadVisualizationBodyFileType;
+  label?: string;
+};
